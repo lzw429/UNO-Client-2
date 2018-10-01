@@ -2,6 +2,7 @@ package GUIForm;
 
 import Service.UserService;
 import Service.UserServiceImpl;
+import Util.GameConstants;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -23,13 +24,17 @@ public class ModeFrame {
                 // 在线游戏 按钮 被按下
                 // 要求键入用户名
                 String username = JOptionPane.showInputDialog("用户登录");
-                if (username == null)
+                username = GameConstants.removeIllegalChar(username);
+                if (username == null || username.equals("")) {
+                    System.out.println("ModeFrame: illegal username");
                     return;
+                }
                 System.out.println("ModeFrame: username " + username);
                 // 使用用户名登录
                 if (userService.login(username)) {// 登录成功
                     System.out.println("ModeFrame: login succeed");
-                    HallFrame.main(null);
+                    String[] args = new String[0];
+                    HallFrame.main(args);
                 } else { // 登录失败
                     System.out.println("ModeFrame: login failed");
                     JOptionPane.showMessageDialog(null, "登录失败");
