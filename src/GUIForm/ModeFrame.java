@@ -33,8 +33,7 @@ public class ModeFrame {
                 // 使用用户名登录
                 if (userService.login(username)) {// 登录成功
                     System.out.println("ModeFrame: login succeed");
-                    String[] args = new String[0];
-                    HallFrame.main(args);
+                    HallFrame.main(new String[10]);
                 } else { // 登录失败
                     System.out.println("ModeFrame: login failed");
                     JOptionPane.showMessageDialog(null, "登录失败");
