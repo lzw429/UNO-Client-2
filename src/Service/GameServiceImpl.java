@@ -38,6 +38,7 @@ public class GameServiceImpl implements GameService {
                     String[] content = msg_split[1].split("\r\n");
                     for (String line : content) {
                         String[] line_split = line.split(",");
+                        deCodeContent(line_split);
                         System.arraycopy(line_split, 0, data[i], 0, 3);
                         i++;
                     }
@@ -49,5 +50,9 @@ public class GameServiceImpl implements GameService {
             System.out.println("GameService: get game tables data exception");
             return null;
         }
+    }
+
+    private void deCodeContent(String[] line_split) {
+         
     }
 }

@@ -1,7 +1,9 @@
 package Util;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class OnlineUtil {
     private static final String IP_ADDR = "syh-pc"; // 服务器地址
@@ -23,9 +25,17 @@ public class OnlineUtil {
             reader = new InputStreamReader(socket.getInputStream());
             writer = new PrintStream(socket.getOutputStream(), true);
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ConnectException ce) {
+            ce.printStackTrace();
             System.out.println("OnlineClient: connect server failed");
+            return false;
+        } catch (UnknownHostException uhe) {
+            uhe.printStackTrace();
+            System.out.println("OnlineClient: unknown host");
+            return false;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.out.println("OnlineClient: io stream exception");
             return false;
         }
     }

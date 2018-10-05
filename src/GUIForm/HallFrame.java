@@ -4,6 +4,8 @@ import Service.GameService;
 import Service.GameServiceImpl;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class HallFrame {
     private JButton enterRoomButton; // 进入房间
@@ -15,13 +17,25 @@ public class HallFrame {
     private static GameService gameService;
     private static String[] columnNames = {"玩家 1", "玩家 2", "状态"};
 
+
+    public HallFrame() {
+        enterRoomButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                super.mouseClicked(mouseEvent);
+                // 进入房间 按钮 被按下
+
+            }
+        });
+    }
+
     public static void main(String[] args) {
         gameService = new GameServiceImpl();
         data = gameService.getGameTablesData();
         JFrame frame = new JFrame("游戏大厅");
         frame.setContentPane(new HallFrame().panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 500);
+        frame.setSize(500, 218);
         frame.setVisible(true);
     }
 
