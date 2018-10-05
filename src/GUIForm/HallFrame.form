@@ -33,7 +33,9 @@
         <children>
           <component id="87167" class="javax.swing.JTable" binding="gameTableList" custom-create="true">
             <constraints/>
-            <properties/>
+            <properties>
+              <autoCreateRowSorter value="true"/>
+            </properties>
             <clientProperties>
               <JTable.autoStartsEdit class="java.lang.Boolean" value="false"/>
               <Table.isFileList class="java.lang.Boolean" value="false"/>

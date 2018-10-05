@@ -24,7 +24,11 @@ public class HallFrame {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 // 进入房间 按钮 被按下
+                if (data[gameTableList.getSelectedRow()][2].equals("空闲")) { // 判断是否选择可进入的房间
 
+                } else { // 提示不可进入
+                    JOptionPane.showMessageDialog(null, "该房间已满", "进入房间", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
     }
@@ -42,6 +46,11 @@ public class HallFrame {
     private void createUIComponents() {
         // 在此处放置自定义组件创建代码
         // 展示游戏大厅数据
-        gameTableList = new JTable(data, columnNames);
+        gameTableList = new JTable(data, columnNames) {
+            public boolean isCellEditable(int row, int column) {
+                // 禁止用户编辑
+                return false;
+            }
+        };
     }
 }

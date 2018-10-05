@@ -38,7 +38,7 @@ public class GameServiceImpl implements GameService {
                     String[] content = msg_split[1].split("\r\n");
                     for (String line : content) {
                         String[] line_split = line.split(",");
-                        deCodeContent(line_split);
+                        decodeContent(line_split);
                         System.arraycopy(line_split, 0, data[i], 0, 3);
                         i++;
                     }
@@ -52,7 +52,19 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    private void deCodeContent(String[] line_split) {
-         
+    private void decodeContent(String[] line_split) {
+        switch (line_split[2]) {
+            case "0":
+                line_split[2] = "空闲";
+                break;
+            case "1":
+                line_split[2] = "等待";
+                break;
+            case "2":
+                line_split[2] = "游戏中";
+                break;
+            default:
+                break;
+        }
     }
 }
