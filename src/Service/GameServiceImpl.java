@@ -19,6 +19,9 @@ public class GameServiceImpl implements GameService {
                 // 消息超时
                 System.out.println("GameService: message timeout");
                 return null;
+            } else if (msg.equals("")) {
+                System.out.println("GameService: message is empty string");
+                return null;
             }
             String[] msg_split = msg.split("\r\n\r\n");
             if (!msg_split[0].equals("uno02 hall")) {
@@ -27,13 +30,19 @@ public class GameServiceImpl implements GameService {
                 return null;
             } else {
                 // 该消息是大厅数据
-                String[] content = msg_split[1].split("\r\n");
-                for (String line : content) {
-                    String[] line_split = line.split(",");
-                    System.arraycopy(line_split, 0, data[i], 0, 3);
-                    i++;
+                if (msg_split.length == 1) {
+                    // 大厅数据为空
+                    return data;
+                } else {
+                    // 大厅数据非空
+                    String[] content = msg_split[1].split("\r\n");
+                    for (String line : content) {
+                        String[] line_split = line.split(",");
+                        System.arraycopy(line_split, 0, data[i], 0, 3);
+                        i++;
+                    }
+                    return data;
                 }
-                return data;
             }
         } catch (Exception e) {
             e.printStackTrace();

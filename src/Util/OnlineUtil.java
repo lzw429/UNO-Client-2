@@ -6,12 +6,9 @@ import java.net.Socket;
 public class OnlineUtil {
     private static final String IP_ADDR = "syh-pc"; // 服务器地址
     private static final int PORT = 4290; // 服务器端口号
-    private static boolean isSocketOpen = false;
     private static Socket socket = null;
-    private static PrintWriter printWriter = null;
-    private static BufferedReader bufferedReader = null;
+    private static PrintStream writer = null;
     private static Reader reader = null;
-    private static DataInputStream dataInputStream = null;
 
     /**
      * 连接服务器
@@ -20,20 +17,17 @@ public class OnlineUtil {
      */
     public static boolean connectServer() {
         try {
-            if (isSocketOpen)
+            if (socket != null && reader != null && writer != null)
                 return true;
             socket = new Socket(IP_ADDR, PORT);
-            dataInputStream = new DataInputStream(socket.getInputStream());
-            //  bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             reader = new InputStreamReader(socket.getInputStream());
-            printWriter = new PrintWriter(socket.getOutputStream(), true);
-            isSocketOpen = true;
+            writer = new PrintStream(socket.getOutputStream(), true);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("OnlineClient: connect server failed");
             return false;
         }
-        return true;
     }
 
     /**
@@ -43,12 +37,9 @@ public class OnlineUtil {
      */
     public static boolean closeSocket() {
         try {
-            printWriter.close();
-            // bufferedReader.close();
+            writer.close();
             reader.close();
-            dataInputStream.close();
             socket.close();
-            isSocketOpen = false;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("OnlineClient: close socket failed");
@@ -64,24 +55,23 @@ public class OnlineUtil {
      */
     public static String receiveMsg() {
         if (!connectServer()) return null;
-        // String ret;
         StringBuilder builder = new StringBuilder();
         try {
-            //   ret = bufferedReader.readLine();
-            char chars[] = new char[1024];
-            int len;
-            while ((len = reader.read(chars)) != -1) {
-                builder.append(new String(chars, 0, len));
+            char chars[] = new char[GameConstants.BUFSIZ];
+            int len = reader.read(chars);
+            builder.append(new String(chars, 0, len));
+
+            if (builder.toString().equals("")) {
+                System.out.println("Receive from server: empty string");
+            } else {
+                System.out.println("Receive from server: " + builder.toString());
             }
-            System.out.println("Receive from server: " + builder);
-            //    ret = dataInputStream.readUTF();
-            //  System.out.println("Server: " + ret);
+            return builder.toString();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("OnlineClient: receive message exception");
             return null;
         }
-        return builder.toString();
     }
 
     /**
@@ -93,14 +83,14 @@ public class OnlineUtil {
     public static boolean sendMsg(String msg) {
         if (!connectServer()) return false;
         try {
-            printWriter.write(msg);
-            printWriter.flush();
+            writer.print(msg);
+            writer.flush();
             System.out.println("Send to server: " + msg);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("OnlineClient: send message exception");
             return false;
         }
-        return true;
     }
 }
