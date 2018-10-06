@@ -8,6 +8,9 @@ public class GameFrame {
     private JPanel player2Panel;
     private JPanel infoPanel;
     private JPanel tablePanel;
+    private JLabel remainingCards; // 剩余牌数
+    private JLabel countLabel;
+    private JLabel turnLabel;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("GameFrame");

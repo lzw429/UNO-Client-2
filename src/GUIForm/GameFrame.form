@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="463" height="309"/>
+      <xy x="20" y="20" width="541" height="440"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -38,7 +38,38 @@
         </constraints>
         <properties/>
         <border type="none"/>
-        <children/>
+        <children>
+          <component id="77c1" class="javax.swing.JLabel" binding="remainingCards">
+            <constraints>
+              <card name="剩余牌数"/>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="0"/>
+              <text value="剩余卡牌："/>
+              <verticalAlignment value="3"/>
+            </properties>
+          </component>
+          <component id="89a93" class="javax.swing.JLabel" binding="countLabel">
+            <constraints>
+              <card name="Card1"/>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="0"/>
+              <text value="已打出计数"/>
+            </properties>
+          </component>
+          <component id="2d7d9" class="javax.swing.JLabel" binding="turnLabel">
+            <constraints>
+              <card name="Card2"/>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="11"/>
+              <text value="轮到"/>
+              <verticalAlignment value="1"/>
+            </properties>
+          </component>
+        </children>
       </grid>
     </children>
   </grid>

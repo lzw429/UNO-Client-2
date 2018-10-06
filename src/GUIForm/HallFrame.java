@@ -20,7 +20,6 @@ public class HallFrame {
     private static GameService gameService;
     private static String[] columnNames = {"玩家 1", "玩家 2", "状态"};
 
-
     public HallFrame() {
         enterRoomButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -59,6 +58,7 @@ public class HallFrame {
                 }
             }
         });
+
         goBackButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
