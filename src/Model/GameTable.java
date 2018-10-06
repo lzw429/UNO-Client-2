@@ -3,27 +3,18 @@ package Model;
 import java.util.List;
 
 public class GameTable {
-    private boolean started; // 是否正在游戏中
+    private int status; // 游戏状态
     private List<String> players; // 房间中的玩家列表
+    private int mode; // 游戏模式
 
-    public boolean isStarted() {
-        return started;
-    }
-
-    public void setStarted(boolean started) {
-        this.started = started;
-    }
+    // mode 常量
+    public static final int ONLINE = 2;
 
     public List<String> getPlayers() {
         return players;
     }
 
     public void setPlayers(List<String> players) {
-        this.players = players;
-    }
-
-    public GameTable(boolean started, List<String> players) {
-        this.started = started;
         this.players = players;
     }
 }
