@@ -3,6 +3,7 @@ package GUIForm;
 import Service.UserService;
 import Service.UserServiceImpl;
 import Util.GameConstants;
+import Util.OnlineUtil;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -33,6 +34,7 @@ public class ModeFrame {
                 // 使用用户名登录
                 if (userService.login(username)) {// 登录成功
                     System.out.println("ModeFrame: login succeed");
+                    OnlineUtil.setUsername(username); // 设定当前用户的用户名
                     HallFrame.main(new String[10]);
                 } else { // 登录失败
                     System.out.println("ModeFrame: login failed");

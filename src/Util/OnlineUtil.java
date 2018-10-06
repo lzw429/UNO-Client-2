@@ -1,6 +1,9 @@
 package Util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.Reader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -11,6 +14,25 @@ public class OnlineUtil {
     private static Socket socket = null;
     private static PrintStream writer = null;
     private static Reader reader = null;
+    private static String username = null;
+
+    /**
+     * 获取当前用户的用户名
+     *
+     * @return 用户名
+     */
+    public static String getUsername() {
+        return username;
+    }
+
+    /**
+     * 设置当前用户的用户名
+     *
+     * @param username 用户名
+     */
+    public static void setUsername(String username) {
+        OnlineUtil.username = username;
+    }
 
     /**
      * 连接服务器
