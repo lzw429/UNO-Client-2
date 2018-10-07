@@ -8,9 +8,9 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 
 public class CardPanelImpl extends JPanel implements CardPanel {
-    private Color cardColor = null; // 牌的颜色
-    private String value = null; // 牌上的数字或牌的功能
-    private int type = 0; // 牌的类型
+    private Color cardColor; // 牌的颜色
+    private String value; // 牌上的数字或牌的功能
+    private int type; // 牌的类型
 
     private Border defaultBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.white, Color.gray);
     private Border focusedBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.black, Color.gray);
@@ -29,12 +29,14 @@ public class CardPanelImpl extends JPanel implements CardPanel {
     /**
      * Mouse 监听器
      */
-    class CardMouseAdapter extends MouseAdapter {
+    public class CardMouseAdapter extends MouseAdapter {
         public void mouseEntered(MouseEvent e) {
+            // 鼠标进入时 设置边框
             setBorder(focusedBorder);
         }
 
         public void mouseExited(MouseEvent e) {
+            // 鼠标退出时 设置边框
             setBorder(defaultBorder);
         }
     }
