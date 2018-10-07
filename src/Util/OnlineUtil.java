@@ -94,9 +94,9 @@ public class OnlineUtil {
             builder.append(new String(chars, 0, len));
 
             if (builder.toString().equals("")) {
-                System.out.println("Receive from server: empty string");
+                System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server: empty string");
             } else {
-                System.out.println("Receive from server: " + builder.toString());
+                System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server: " + builder.toString());
             }
             return builder.toString();
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public class OnlineUtil {
         try {
             writer.print(msg);
             writer.flush();
-            System.out.println("Send to server: " + msg);
+            System.out.println("[" + TimeUtil.getTimeInMillis() + "] Send to server: " + msg);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

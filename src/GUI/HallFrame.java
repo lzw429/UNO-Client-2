@@ -1,6 +1,5 @@
 package GUI;
 
-import GUI.GameWindow.GameFrame;
 import Service.GameService;
 import Service.GameServiceImpl;
 import Util.GameConstants;
@@ -18,7 +17,7 @@ public class HallFrame {
     private JTable gameTableList;
     private JScrollPane scrollPane;
     private static Object[][] data;
-    private static GameService gameService;
+    private static GameService gameService = new GameServiceImpl();
     private static String[] columnNames = {"玩家 1", "玩家 2", "状态"};
 
     public HallFrame() {
@@ -43,7 +42,7 @@ public class HallFrame {
                         if (receive.startsWith("uno02 enterroom ")) {
                             String[] receive_split = receive.split(" ");
                             if (receive_split[3].equals("1")) { // 服务器：进入房间成功
-                                GameFrame.main(new String[10]); // 打开游戏窗口
+                                gameService.createGameTable();
                             } else if (receive_split[3].equals("0")) { // 服务器：进入房间失败
                                 JOptionPane.showMessageDialog(null, "请重试...", "进入房间", JOptionPane.ERROR_MESSAGE);
                             }
@@ -71,7 +70,6 @@ public class HallFrame {
     }
 
     public static void main(String[] args) {
-        gameService = new GameServiceImpl();
         data = gameService.getGameTablesData();
         JFrame frame = new JFrame("游戏大厅");
         frame.setContentPane(new HallFrame().panel);

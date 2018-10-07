@@ -7,4 +7,9 @@ public interface GameService {
      * @return 用于 GUI 显示的大厅数据
      */
     String[][] getGameTablesData();
+
+    /**
+     * 获取对局数据
+     */
+    void createGameTable();
 }
