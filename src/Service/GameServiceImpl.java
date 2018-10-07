@@ -1,11 +1,22 @@
 package Service;
 
+import Model.GameTable;
 import Util.GameConstants;
 import Util.OnlineUtil;
 
 import java.util.concurrent.TimeUnit;
 
 public class GameServiceImpl implements GameService {
+    private static GameTable gameTable = null;
+
+    public void createGameTable() {
+        if (gameTable == null)
+            GameTable gameTable = new GameTable(GameTable.ONLINE); // 从服务器获取当前对局信息
+        else {
+            System.out.println("GameService: game table already exists");
+        }
+    }
+
     @Override
     public String[][] getGameTablesData() {
         int i = 0;

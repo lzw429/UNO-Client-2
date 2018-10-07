@@ -42,7 +42,7 @@ public class HallFrame {
                         receive = receive.substring(0, receive.length() - 2); // 去除字符串末尾 \r\n
                         if (receive.startsWith("uno02 enterroom ")) {
                             String[] receive_split = receive.split(" ");
-                            if (receive_split[3].equals("1")) {                            // 服务器：进入房间成功
+                            if (receive_split[3].equals("1")) { // 服务器：进入房间成功
                                 GameFrame.main(new String[10]); // 打开游戏窗口
                             } else if (receive_split[3].equals("0")) { // 服务器：进入房间失败
                                 JOptionPane.showMessageDialog(null, "请重试...", "进入房间", JOptionPane.ERROR_MESSAGE);
