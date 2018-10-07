@@ -1,4 +1,4 @@
-package GUIForm;
+package GUI.GameWindow;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -41,9 +41,9 @@ public class CardPanelImpl extends JPanel implements CardPanel {
         }
     }
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        Graphics2D g2 = (Graphics2D) graphics;
 
         int cardWidth = CARDSIZE.width;
         int cardHeight = CARDSIZE.height;

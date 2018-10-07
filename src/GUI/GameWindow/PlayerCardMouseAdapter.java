@@ -1,11 +1,14 @@
-package GUIForm;
+package GUI.GameWindow;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PlayerCardMouseAdapter extends MouseAdapter { // 玩家当前持有卡牌的鼠标监听器
-    CardPanelImpl sourceCard;
+/**
+ * 玩家当前持有卡牌的鼠标监听器
+ */
+public class PlayerCardMouseAdapter extends MouseAdapter {
+    private CardPanelImpl sourceCard;
 
     public void mousePressed(MouseEvent e) {
         sourceCard = (CardPanelImpl) e.getSource();

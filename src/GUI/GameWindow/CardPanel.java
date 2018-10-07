@@ -1,4 +1,4 @@
-package GUIForm;
+package GUI.GameWindow;
 
 import java.awt.*;
 

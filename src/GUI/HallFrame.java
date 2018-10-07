@@ -1,5 +1,6 @@
-package GUIForm;
+package GUI;
 
+import GUI.GameWindow.GameFrame;
 import Service.GameService;
 import Service.GameServiceImpl;
 import Util.GameConstants;
@@ -74,7 +75,7 @@ public class HallFrame {
         data = gameService.getGameTablesData();
         JFrame frame = new JFrame("游戏大厅");
         frame.setContentPane(new HallFrame().panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(500, 218);
         frame.setVisible(true);
     }

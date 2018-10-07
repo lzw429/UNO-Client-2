@@ -1,4 +1,4 @@
-package GUIForm;
+package GUI;
 
 import Service.UserService;
 import Service.UserServiceImpl;
