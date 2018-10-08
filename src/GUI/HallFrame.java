@@ -2,8 +2,8 @@ package GUI;
 
 import Service.GameService;
 import Service.GameServiceImpl;
-import Util.GameConstants;
 import Util.OnlineUtil;
+import Util.TimeUtil;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -32,7 +32,7 @@ public class HallFrame {
                     if (roomStatus.equals("空闲") || roomStatus.equals("等待")) { // 判断是否选择可进入的房间
                         String msg = "uno02 enterroom " + OnlineUtil.getUsername() + " " + roomNum + "\r\n";
                         OnlineUtil.sendMsg(msg);
-                        TimeUnit.MILLISECONDS.sleep(GameConstants.timeLimit); // 等待
+                        TimeUnit.MILLISECONDS.sleep(TimeUtil.timeLimit); // 等待
                         String receive = OnlineUtil.receiveMsg();
                         if (receive == null) {
                             System.out.println("UserService: message timeout");
@@ -42,6 +42,7 @@ public class HallFrame {
                         if (receive.startsWith("uno02 enterroom ")) {
                             String[] receive_split = receive.split(" ");
                             if (receive_split[3].equals("1")) { // 服务器：进入房间成功
+                                OnlineUtil.setRoomNum(String.valueOf(roomNum)); // 设置客户端房间号
                                 gameService.createGameTable();
                             } else if (receive_split[3].equals("0")) { // 服务器：进入房间失败
                                 JOptionPane.showMessageDialog(null, "请重试...", "进入房间", JOptionPane.ERROR_MESSAGE);

@@ -1,6 +1,7 @@
 package Model;
 
 import Util.OnlineUtil;
+import Util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,9 @@ public class GameTable {
      */
     public void OnlineGameTable() {
         try {
+            String msg = "uno02 player " + OnlineUtil.getRoomNum() + "\r\n";
+            OnlineUtil.sendMsg(msg);
+            System.out.println("[" + TimeUtil.getTimeInMillis() + "] creating online gametable");
             String receive = OnlineUtil.receiveMsg();
             if (receive == null || !receive.startsWith("uno02 player")) {
                 System.out.println("GameTable: message timeout");

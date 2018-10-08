@@ -14,24 +14,25 @@ public class OnlineUtil {
     private static Socket socket = null;
     private static PrintStream writer = null;
     private static Reader reader = null;
-    private static String username = null;
+    private static String username = null; // 用户名
+    private static String roomNum = null; // 房间号
 
-    /**
-     * 获取当前用户的用户名
-     *
-     * @return 用户名
-     */
+    /* getter & setter */
+
     public static String getUsername() {
         return username;
     }
 
-    /**
-     * 设置当前用户的用户名
-     *
-     * @param username 用户名
-     */
     public static void setUsername(String username) {
         OnlineUtil.username = username;
+    }
+
+    public static String getRoomNum() {
+        return roomNum;
+    }
+
+    public static void setRoomNum(String roomNum) {
+        OnlineUtil.roomNum = roomNum;
     }
 
     /**

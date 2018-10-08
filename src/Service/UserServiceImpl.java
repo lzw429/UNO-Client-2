@@ -1,7 +1,7 @@
 package Service;
 
-import Util.GameConstants;
 import Util.OnlineUtil;
+import Util.TimeUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
             OnlineUtil.connectServer();
             String msg = "uno01 login " + username + "\r\n";
             OnlineUtil.sendMsg(msg);
-            TimeUnit.MILLISECONDS.sleep(GameConstants.timeLimit); // 等待
+            TimeUnit.MILLISECONDS.sleep(TimeUtil.timeLimit); // 等待
             String receive = OnlineUtil.receiveMsg();
             if (receive == null) {
                 System.out.println("UserService: message timeout");
