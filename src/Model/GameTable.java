@@ -59,4 +59,13 @@ public class GameTable {
     public void setPlayers(List<String> players) {
         this.players = players;
     }
+
+    /**
+     * 检查当前打出的牌是否有效
+     *
+     * @param playedCard 打出的牌
+     * @return 有效 true；无效 false
+     */
+    public boolean isValidMove(UNOCard playedCard) {
+    }
 }

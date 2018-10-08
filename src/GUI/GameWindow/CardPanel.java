@@ -9,6 +9,13 @@ public interface CardPanel {
     Color GREEN = new Color(0, 153, 0);
     Color YELLOW = new Color(255, 204, 0);
     Color BLACK = new Color(0, 0, 0);
+    Color[] colors = {RED, BLUE, GREEN, YELLOW, BLACK};
+
+    int red = 0;
+    int blue = 1;
+    int green = 2;
+    int yellow = 3;
+    int black = 4;
 
     // 卡片类型
     int NUMBERS = 1;

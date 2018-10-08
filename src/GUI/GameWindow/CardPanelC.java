@@ -1,5 +1,7 @@
 package GUI.GameWindow;
 
+import Model.UNOCard;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -7,18 +9,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 
-public class CardPanelImpl extends JPanel implements CardPanel {
-    private Color cardColor; // 牌的颜色
+public class CardPanelC extends JPanel implements CardPanel {
+    private Color color; // 牌的颜色
     private String value; // 牌上的数字或牌的功能
     private int type; // 牌的类型
 
     private Border defaultBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.white, Color.gray);
     private Border focusedBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.black, Color.gray);
 
-    public CardPanelImpl(Color cardColor, String value, int type) { // 构造方法
-        this.cardColor = cardColor;
-        this.value = value;
-        this.type = type;
+    // 构造方法
+    public CardPanelC(UNOCard unoCard) {
+        this.color = colors[unoCard.getColor()];
+        this.value = Integer.toString(unoCard.getValue());
+        this.type = unoCard.getType();
 
         this.setPreferredSize(CARDSIZE); // 卡片大小
         this.setBorder(defaultBorder); // 卡片边界
@@ -52,7 +55,7 @@ public class CardPanelImpl extends JPanel implements CardPanel {
         g2.fillRect(0, 0, cardWidth, cardHeight); // 设置背景
 
         int margin = 5; // 边缘
-        g2.setColor(cardColor);
+        g2.setColor(color);
         g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin); // 填充边缘内的矩形
 
         g2.setColor(Color.white);
@@ -69,7 +72,7 @@ public class CardPanelImpl extends JPanel implements CardPanel {
         int StringWidth = fm.stringWidth(value) / 2;
         int FontHeight = defaultFont.getSize() * 1 / 3;
 
-        g2.setColor(cardColor);
+        g2.setColor(color);
         g2.setFont(defaultFont);
         g2.drawString(value, cardWidth / 2 - StringWidth, cardHeight / 2 + FontHeight);
 
@@ -84,12 +87,12 @@ public class CardPanelImpl extends JPanel implements CardPanel {
         g2.drawString(value, 2 * margin, 5 * margin);
     }
 
-    public Color getCardColor() {
-        return cardColor;
+    public Color getColor() {
+        return color;
     }
 
-    public void setCardColor(Color cardColor) {
-        this.cardColor = cardColor;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public String getValue() {

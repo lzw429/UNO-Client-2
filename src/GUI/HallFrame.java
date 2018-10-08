@@ -32,6 +32,7 @@ public class HallFrame {
                     if (roomStatus.equals("空闲") || roomStatus.equals("等待")) { // 判断是否选择可进入的房间
                         String msg = "uno02 enterroom " + OnlineUtil.getUsername() + " " + roomNum + "\r\n";
                         OnlineUtil.sendMsg(msg);
+
                         TimeUnit.MILLISECONDS.sleep(TimeUtil.timeLimit); // 等待
                         String receive = OnlineUtil.receiveMsg();
                         if (receive == null) {
@@ -39,11 +40,11 @@ public class HallFrame {
                             return;
                         }
                         receive = receive.substring(0, receive.length() - 2); // 去除字符串末尾 \r\n
+
                         if (receive.startsWith("uno02 enterroom ")) {
                             String[] receive_split = receive.split(" ");
                             if (receive_split[3].equals("1")) { // 服务器：进入房间成功
-                                OnlineUtil.setRoomNum(String.valueOf(roomNum)); // 设置客户端房间号
-                                gameService.createGameTable();
+                                enterRoom(roomNum);
                             } else if (receive_split[3].equals("0")) { // 服务器：进入房间失败
                                 JOptionPane.showMessageDialog(null, "请重试...", "进入房间", JOptionPane.ERROR_MESSAGE);
                             }
@@ -88,5 +89,15 @@ public class HallFrame {
                 return false;
             }
         };
+    }
+
+    /**
+     * 进入房间
+     * 修改大厅视图
+     *
+     * @param roomNum 房间号
+     */
+    private void enterRoom(int roomNum) {
+        OnlineUtil.setRoomNum(String.valueOf(roomNum)); // 设置客户端房间号
     }
 }

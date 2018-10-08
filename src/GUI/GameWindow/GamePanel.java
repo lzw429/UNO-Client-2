@@ -1,5 +1,7 @@
 package GUI.GameWindow;
 
+import Model.UNOCard;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,5 +12,11 @@ public class GamePanel extends JPanel {
 
     public GamePanel() {
         setPreferredSize(new Dimension(960, 720));
+        setBackground(new Color(30, 36, 40));
+        setLayout(new BorderLayout());
+    }
+
+    bool isValidMove(UNOCard unoCard) {
+
     }
 }
