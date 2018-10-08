@@ -28,23 +28,7 @@ public class GameTable {
      */
     public void OnlineGameTable() {
         try {
-            String msg = "uno02 player " + OnlineUtil.getRoomNum() + "\r\n";
-            OnlineUtil.sendMsg(msg);
-            System.out.println("[" + TimeUtil.getTimeInMillis() + "] creating online gametable");
-            String receive = OnlineUtil.receiveMsg();
-            if (receive == null || !receive.startsWith("uno02 player")) {
-                System.out.println("GameTable: message timeout");
-                return;
-            }
-            receive = receive.substring(0, receive.length() - 2); // 去除字符串末尾 \r\n
-            String[] receive_split = receive.split(" ");
-            String[] playerList = receive_split[2].split(",");
-            if (playerList.length == 0) {
-                System.out.println("GameTable: player list is empty");
-                return;
-            }
-            players = new ArrayList<>(playerList.length);
-            players.addAll(Arrays.asList(playerList));
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("GameTable: create online GameTable exception");

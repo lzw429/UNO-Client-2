@@ -93,11 +93,14 @@ public class HallFrame {
 
     /**
      * 进入房间
-     * 修改大厅视图
+     * 修改显示大厅信息的 JList
      *
      * @param roomNum 房间号
      */
     private void enterRoom(int roomNum) {
         OnlineUtil.setRoomNum(String.valueOf(roomNum)); // 设置客户端房间号
+        data[roomNum][2] = "等待"; // 修改 JList 中的房间状态
+
+        // 将用户名添加到 JList
     }
 }
