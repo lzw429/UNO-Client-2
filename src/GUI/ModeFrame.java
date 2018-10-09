@@ -15,7 +15,6 @@ public class ModeFrame {
     private JButton twoPlayersButton;
     private JPanel panel;
     private JLabel label1;
-    private UserService userService = new UserServiceImpl();
 
     public ModeFrame() {
         onlineGameButton.addMouseListener(new MouseAdapter() {
@@ -32,6 +31,7 @@ public class ModeFrame {
                 }
                 System.out.println("ModeFrame: username " + username);
                 // 使用用户名登录
+                UserService userService = new UserServiceImpl();
                 if (userService.login(username)) {// 登录成功
                     System.out.println("ModeFrame: login succeed");
                     OnlineUtil.setUsername(username); // 设定当前用户的用户名

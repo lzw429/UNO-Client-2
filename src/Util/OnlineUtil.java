@@ -90,6 +90,7 @@ public class OnlineUtil {
         if (!connectServer()) return null;
         StringBuilder builder = new StringBuilder();
         try {
+            // todo 保持与服务器的连接
             char chars[] = new char[GameConstants.BUFSIZ];
             int len = reader.read(chars);
             builder.append(new String(chars, 0, len));

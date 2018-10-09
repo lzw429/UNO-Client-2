@@ -16,7 +16,7 @@ public class HallFrame {
     private JPanel panel;
     private JTable gameTableList;
     private JScrollPane scrollPane;
-    private static Object[][] data;
+    private static Object[][] data; // 构造 gameTableList 所用数据
     private static GameService gameService = new GameServiceImpl();
     private static String[] columnNames = {"玩家 1", "玩家 2", "状态"};
 
@@ -93,14 +93,13 @@ public class HallFrame {
 
     /**
      * 进入房间
-     * 修改显示大厅信息的 JList
+     * 修改显示大厅信息的 JTable
      *
      * @param roomNum 房间号
      */
     private void enterRoom(int roomNum) {
         OnlineUtil.setRoomNum(String.valueOf(roomNum)); // 设置客户端房间号
-        data[roomNum][2] = "等待"; // 修改 JList 中的房间状态
-
-        // 将用户名添加到 JList
+        data[roomNum][2] = "等待"; // 修改 JTable 中的房间状态
+        // 将用户名添加到 JTable
     }
 }

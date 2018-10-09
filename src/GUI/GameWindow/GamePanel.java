@@ -16,7 +16,8 @@ public class GamePanel extends JPanel {
         setLayout(new BorderLayout());
     }
 
-    bool isValidMove(UNOCard unoCard) {
-
+    boolean isValidMove(UNOCard unoCard) {
+        // todo code
+        return false;
     }
 }

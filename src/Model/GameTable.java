@@ -51,5 +51,7 @@ public class GameTable {
      * @return 有效 true；无效 false
      */
     public boolean isValidMove(UNOCard playedCard) {
+        // todo code
+        return false;
     }
 }
