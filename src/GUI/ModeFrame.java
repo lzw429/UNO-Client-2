@@ -23,7 +23,6 @@ public class ModeFrame {
                 super.mouseClicked(mouseEvent);
                 // 在线游戏 按钮 被按下
                 // 要求键入用户名
-                new OnlineUtil().start(); // 连接服务器
                 String username = JOptionPane.showInputDialog("用户登录");
                 username = GameConstants.removeIllegalChar(username);
                 if (username == null || username.equals("")) {
@@ -31,6 +30,7 @@ public class ModeFrame {
                     return;
                 }
                 System.out.println("ModeFrame: username " + username);
+                new OnlineUtil().start(); // 连接服务器
                 // 使用用户名登录
                 UserService userService = new UserServiceImpl();
                 if (userService.login(username)) {// 登录成功

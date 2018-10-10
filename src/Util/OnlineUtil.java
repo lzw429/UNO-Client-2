@@ -59,7 +59,7 @@ public class OnlineUtil extends Thread {
 
                 builder.append(new String(chars, 0, len));
                 String msg = builder.toString();
-                System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server: " + msg);
+                System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server, len = " + msg.length() + ": " + msg);
 
                 if (msg.startsWith("uno01 login")) {
                     login(msg);
@@ -159,7 +159,7 @@ public class OnlineUtil extends Thread {
         try {
             writer.print(msg);
             writer.flush();
-            System.out.println("[" + TimeUtil.getTimeInMillis() + "] Send to server: " + msg);
+            System.out.println("[" + TimeUtil.getTimeInMillis() + "] Send to server, len = " + msg.length() + ": " + msg);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
