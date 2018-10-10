@@ -20,6 +20,18 @@ public class HallFrame {
     private static GameService gameService = new GameServiceImpl();
     private static String[] columnNames = {"玩家 1", "玩家 2", "状态"};
 
+    /* getter & setter */
+
+    public static Object[][] getData() {
+        return data;
+    }
+
+    public static void setData(Object[][] data) {
+        HallFrame.data = data;
+    }
+
+    /* 构造方法 */
+
     public HallFrame() {
         enterRoomButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -33,24 +45,6 @@ public class HallFrame {
                         String msg = "uno02 enterroom " + OnlineUtil.getUsername() + " " + roomNum + "\r\n";
                         OnlineUtil.sendMsg(msg);
 
-                        TimeUnit.MILLISECONDS.sleep(TimeUtil.timeLimit); // 等待
-                        String receive = OnlineUtil.receiveMsg();
-                        if (receive == null) {
-                            System.out.println("UserService: message timeout");
-                            return;
-                        }
-                        receive = receive.substring(0, receive.length() - 2); // 去除字符串末尾 \r\n
-
-                        if (receive.startsWith("uno02 enterroom ")) {
-                            String[] receive_split = receive.split(" ");
-                            if (receive_split[3].equals("1")) { // 服务器：进入房间成功
-                                enterRoom(roomNum);
-                            } else if (receive_split[3].equals("0")) { // 服务器：进入房间失败
-                                JOptionPane.showMessageDialog(null, "请重试...", "进入房间", JOptionPane.ERROR_MESSAGE);
-                            }
-                        } else { // 消息错误
-                            System.out.println("HallFrame: receive the wrong message when entering room");
-                        }
                     } else { // 不可进入房间
                         JOptionPane.showMessageDialog(null, "该房间已满", "进入房间", JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -71,8 +65,12 @@ public class HallFrame {
         });
     }
 
-    public static void main(String[] args) {
-        data = gameService.getGameTablesData();
+    public static void main(String[] args) throws InterruptedException {
+        synchronized (OnlineUtil.messageLock) {
+            gameService.getGameTablesData();
+            OnlineUtil.messageLock.wait(3000);
+        }
+
         JFrame frame = new JFrame("游戏大厅");
         frame.setContentPane(new HallFrame().panel);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -89,17 +87,5 @@ public class HallFrame {
                 return false;
             }
         };
-    }
-
-    /**
-     * 进入房间
-     * 修改显示大厅信息的 JTable
-     *
-     * @param roomNum 房间号
-     */
-    private void enterRoom(int roomNum) {
-        OnlineUtil.setRoomNum(String.valueOf(roomNum)); // 设置客户端房间号
-        data[roomNum][2] = "等待"; // 修改 JTable 中的房间状态
-        // 将用户名添加到 JTable
     }
 }

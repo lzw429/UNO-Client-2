@@ -23,6 +23,7 @@ public class ModeFrame {
                 super.mouseClicked(mouseEvent);
                 // 在线游戏 按钮 被按下
                 // 要求键入用户名
+                new OnlineUtil().start(); // 连接服务器
                 String username = JOptionPane.showInputDialog("用户登录");
                 username = GameConstants.removeIllegalChar(username);
                 if (username == null || username.equals("")) {
@@ -35,7 +36,11 @@ public class ModeFrame {
                 if (userService.login(username)) {// 登录成功
                     System.out.println("ModeFrame: login succeed");
                     OnlineUtil.setUsername(username); // 设定当前用户的用户名
-                    HallFrame.main(new String[10]);
+                    try {
+                        HallFrame.main(new String[10]);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 } else { // 登录失败
                     System.out.println("ModeFrame: login failed");
                     JOptionPane.showMessageDialog(null, "登录失败");
