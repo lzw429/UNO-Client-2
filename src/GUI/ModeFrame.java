@@ -4,6 +4,7 @@ import Service.UserService;
 import Service.UserServiceImpl;
 import Util.GameConstants;
 import Util.OnlineUtil;
+import Util.TimeUtil;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -29,12 +30,12 @@ public class ModeFrame {
                     System.out.println("ModeFrame: illegal username");
                     return;
                 }
-                System.out.println("ModeFrame: username " + username);
-                new OnlineUtil().start(); // 连接服务器
+                System.out.println("[" + TimeUtil.getTimeInMillis() + "] ModeFrame: username " + username);
+                new OnlineUtil().start(); // 接收来自服务器的消息
                 // 使用用户名登录
                 UserService userService = new UserServiceImpl();
                 if (userService.login(username)) {// 登录成功
-                    System.out.println("ModeFrame: login succeed");
+                    System.out.println("[" + TimeUtil.getTimeInMillis() + "] ModeFrame: login succeed");
                     OnlineUtil.setUsername(username); // 设定当前用户的用户名
                     try {
                         HallFrame.main(new String[10]);
@@ -42,7 +43,7 @@ public class ModeFrame {
                         e.printStackTrace();
                     }
                 } else { // 登录失败
-                    System.out.println("ModeFrame: login failed");
+                    System.out.println("[" + TimeUtil.getTimeInMillis() + "] ModeFrame: login failed");
                     JOptionPane.showMessageDialog(null, "登录失败");
                 }
             }

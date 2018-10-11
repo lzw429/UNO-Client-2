@@ -2,11 +2,7 @@ package Service;
 
 import GUI.GameWindow.GameFrame;
 import Model.GameTable;
-import Util.GameConstants;
 import Util.OnlineUtil;
-import Util.TimeUtil;
-
-import java.util.concurrent.TimeUnit;
 
 public class GameServiceImpl implements GameService {
     private static GameTable gameTable = null;
@@ -22,9 +18,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void getGameTablesData() {
-        int i = 0;
         try {
-            OnlineUtil.connectServer();
             OnlineUtil.sendMsg("uno02 hall\r\n"); // 请求游戏大厅数据
         } catch (Exception e) {
             e.printStackTrace();

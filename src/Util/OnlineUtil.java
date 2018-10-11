@@ -49,7 +49,8 @@ public class OnlineUtil extends Thread {
                 e.printStackTrace();
             }
         }
-        StringBuilder builder = new StringBuilder();
+        System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: listening thread has started");
+        StringBuilder builder;
         while (true) {
             try {
                 char chars[] = new char[GameConstants.BUFSIZ];
@@ -57,6 +58,7 @@ public class OnlineUtil extends Thread {
                 if (len < 0)
                     continue;
 
+                builder = new StringBuilder();
                 builder.append(new String(chars, 0, len));
                 String msg = builder.toString();
                 System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server, len = " + msg.length() + ": " + msg);
@@ -199,6 +201,7 @@ public class OnlineUtil extends Thread {
 
             if (msg_split.length == 1) {
                 // 大厅数据为空
+                messageLock.notify();
                 return;
             }
 

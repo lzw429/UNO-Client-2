@@ -3,12 +3,10 @@ package GUI;
 import Service.GameService;
 import Service.GameServiceImpl;
 import Util.OnlineUtil;
-import Util.TimeUtil;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.concurrent.TimeUnit;
 
 public class HallFrame {
     private JButton enterRoomButton; // 进入房间
@@ -44,7 +42,6 @@ public class HallFrame {
                     if (roomStatus.equals("空闲") || roomStatus.equals("等待")) { // 判断是否选择可进入的房间
                         String msg = "uno02 enterroom " + OnlineUtil.getUsername() + " " + roomNum + "\r\n";
                         OnlineUtil.sendMsg(msg);
-
                     } else { // 不可进入房间
                         JOptionPane.showMessageDialog(null, "该房间已满", "进入房间", JOptionPane.INFORMATION_MESSAGE);
                     }
