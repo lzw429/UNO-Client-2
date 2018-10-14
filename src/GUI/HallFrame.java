@@ -5,6 +5,7 @@ import Service.GameServiceImpl;
 import Util.OnlineUtil;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -78,11 +79,14 @@ public class HallFrame {
     private void createUIComponents() {
         // 在此处放置自定义组件创建代码
         // 展示游戏大厅数据
-        gameTableList = new JTable(data, columnNames) {
+        DefaultTableModel gameTableModel = new DefaultTableModel(data, columnNames) {
+        };
+        gameTableList = new JTable(gameTableModel) {
             public boolean isCellEditable(int row, int column) {
-                // 禁止用户编辑
+                // 禁止用户编辑大厅数据
                 return false;
             }
         };
+
     }
 }

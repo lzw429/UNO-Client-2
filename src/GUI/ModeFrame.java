@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static java.lang.Thread.sleep;
+
 public class ModeFrame {
     private JButton onePlayerButton;
     private JButton onlineGameButton;
@@ -31,8 +33,10 @@ public class ModeFrame {
                     return;
                 }
                 System.out.println("[" + TimeUtil.getTimeInMillis() + "] ModeFrame: username " + username);
-                new OnlineUtil().start(); // 接收来自服务器的消息
                 // 使用用户名登录
+                //noinspection StatementWithEmptyBody
+                while (!OnlineUtil.isReadyToReceive()) {
+                }
                 UserService userService = new UserServiceImpl();
                 if (userService.login(username)) {// 登录成功
                     System.out.println("[" + TimeUtil.getTimeInMillis() + "] ModeFrame: login succeed");
@@ -51,6 +55,7 @@ public class ModeFrame {
     }
 
     public static void main(String[] args) {
+        new OnlineUtil().start(); // 接收来自服务器的消息
         JFrame frame = new JFrame("选择模式");
         frame.setContentPane(new ModeFrame().panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

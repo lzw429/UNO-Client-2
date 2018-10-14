@@ -2,7 +2,6 @@ package Util;
 
 import GUI.HallFrame;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -10,7 +9,7 @@ import java.io.Reader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 public class OnlineUtil extends Thread {
     private static final String IP_ADDR = "syh-pc"; // 服务器地址
@@ -21,6 +20,8 @@ public class OnlineUtil extends Thread {
     private static String username = null; // 用户名
     private static String roomNum = null; // 房间号
     public static final Object messageLock = new Object();
+    private static boolean readyToReceive = false;
+
 
     /* getter & setter */
 
@@ -40,6 +41,10 @@ public class OnlineUtil extends Thread {
         OnlineUtil.roomNum = roomNum;
     }
 
+    public static boolean isReadyToReceive() {
+        return readyToReceive;
+    }
+
     public void run() {
         while (!connectServer()) {
             try {
@@ -49,30 +54,34 @@ public class OnlineUtil extends Thread {
                 e.printStackTrace();
             }
         }
-        System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: listening thread has started");
         StringBuilder builder;
+        char chars[] = new char[GameConstants.BUFSIZ];
+        System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: listening thread has started");
         while (true) {
             try {
-                char chars[] = new char[GameConstants.BUFSIZ];
+                readyToReceive = true;
+                IntStream.range(0, GameConstants.BUFSIZ).forEach(i -> chars[i] = '\0');
                 int len = reader.read(chars);
                 if (len < 0)
                     continue;
-
                 builder = new StringBuilder();
                 builder.append(new String(chars, 0, len));
                 String msg = builder.toString();
-                System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server, len = " + msg.length() + ": " + msg);
+                System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: Receive from server, len = " + msg.length() + ": " + msg);
 
-                if (msg.startsWith("uno01 login")) {
+                if (msg.startsWith("uno01 login")) { // 登录反馈
                     login(msg);
-                } else if (msg.startsWith("uno02 hall")) {
+                } else if (msg.startsWith("uno02 hall")) { // 服务器单播的大厅消息
                     setGameTablesData(msg);
-                } else if (msg.startsWith("uno02 enterroom")) {
+                } else if (msg.startsWith("uno02 enterroom")) { // 进入房间反馈
                     enterRoom(msg);
+                } else if (msg.startsWith("uno02 roomstatus")) { // 服务器广播的房间状态，如果进入房间失败不会广播
+                    setRoomStatus(msg);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("OnlineClient: receive message exception");
+                System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: receive message exception");
+                return;
             }
         }
     }
@@ -124,33 +133,6 @@ public class OnlineUtil extends Thread {
     }
 
     /**
-     * 接收来自服务器的消息
-     *
-     * @return 返回消息；若异常，返回 null
-     */
-    public static String receiveMsg() {
-        if (!connectServer()) return null;
-        StringBuilder builder = new StringBuilder();
-        try {
-            // todo 保持与服务器的连接
-            char chars[] = new char[GameConstants.BUFSIZ];
-            int len = reader.read(chars);
-            builder.append(new String(chars, 0, len));
-
-            if (builder.toString().equals("")) {
-                System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server: empty string");
-            } else {
-                System.out.println("[" + TimeUtil.getTimeInMillis() + "] Receive from server: " + builder.toString());
-            }
-            return builder.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("OnlineClient: receive message exception");
-            return null;
-        }
-    }
-
-    /**
      * 向服务器发送消息
      *
      * @param msg 消息内容
@@ -161,7 +143,7 @@ public class OnlineUtil extends Thread {
         try {
             writer.print(msg);
             writer.flush();
-            System.out.println("[" + TimeUtil.getTimeInMillis() + "] Send to server, len = " + msg.length() + ": " + msg);
+            System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: Send to server, len = " + msg.length() + ": " + msg);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,10 +160,10 @@ public class OnlineUtil extends Thread {
     private void login(String msg) {
         synchronized (OnlineUtil.messageLock) {
             msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
-            String[] msg_split = msg.split(" ");
-            if (msg_split[1].equals("login")) {
-                if (msg_split[3].equals("1")) { // 登录成功
-                    username = msg_split[2];
+            String[] msgSplit = msg.split(" ");
+            if (msgSplit[1].equals("login")) {
+                if (msgSplit[3].equals("1")) { // 登录成功
+                    username = msgSplit[2];
                 }
             }
             OnlineUtil.messageLock.notify();
@@ -196,17 +178,17 @@ public class OnlineUtil extends Thread {
     private void setGameTablesData(String msg) {
         synchronized (messageLock) {
             String[][] data = new String[GameConstants.roomNum][3];
-            String[] msg_split = msg.split("\r\n\r\n");
+            String[] msgSplit = msg.split("\r\n\r\n");
             int i = 0;
 
-            if (msg_split.length == 1) {
+            if (msgSplit.length == 1) {
                 // 大厅数据为空
                 messageLock.notify();
                 return;
             }
 
             // 大厅数据非空
-            String[] content = msg_split[1].split("\r\n");
+            String[] content = msgSplit[1].split("\r\n");
             for (String line : content) {
                 String[] line_split = line.split(",");
                 decodeRoomStatus(line_split);
@@ -240,16 +222,37 @@ public class OnlineUtil extends Thread {
         }
     }
 
+    /**
+     * 处理对进入房间请求的反馈
+     *
+     * @param msg 进入房间反馈
+     */
     private void enterRoom(String msg) {
         msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
-        String[] msg_split = msg.split(" ");
+        String[] msgSplit = msg.split(" ");
 
-        if (msg_split[3].equals("1")) { // 服务器：进入房间成功
+        if (msgSplit[3].equals("1")) { // 服务器：进入房间成功
             setRoomNum(String.valueOf(roomNum)); // 设置客户端房间号
-            // todo 修改 JTable 中的房间状态
-            // todo 将用户名添加到 JTable
-        } else if (msg_split[3].equals("0")) { // 服务器：进入房间失败
+            // 进一步处理在 setRoomStatus 方法中
+        } else if (msgSplit[3].equals("0")) { // 服务器：进入房间失败
             // todo GUI 提示重试 JOptionPane.showMessageDialog(null, "请重试...", "进入房间", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /**
+     * 修改游戏房间状态
+     *
+     * @param msg 服务器广播的房间状态
+     */
+    private void setRoomStatus(String msg) {
+        msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
+        String[] msgSplit = msg.split(" ");
+
+        String roomStatus = msgSplit[3];
+        int roomNum = Integer.parseInt(msgSplit[2]);
+        String[] roomStatusSplit = roomStatus.split(",");
+        // todo 修改 JTable 中的房间信息，包括用户名和房间状态
+        Object[][] data = HallFrame.getData();
+        data[roomNum] = roomStatusSplit;
     }
 }
