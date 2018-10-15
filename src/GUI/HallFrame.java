@@ -62,6 +62,9 @@ public class HallFrame {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 // 返回 按钮 被按下
+                // todo 关闭游戏大厅
+                // todo 断开与服务器的连接
+                // todo 重置联机信息
                 System.exit(0);
             }
         });

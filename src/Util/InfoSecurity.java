@@ -13,5 +13,4 @@ public class InfoSecurity {
     public long randomLong() {
         return new Random().nextLong(); // 与时间相关
     }
-
 }

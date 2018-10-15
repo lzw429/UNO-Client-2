@@ -1,10 +1,13 @@
 package Util;
 
 import GUI.HallFrame;
+import com.google.gson.Gson;
 
 import javax.swing.*;
 
 public class ProcessThread extends Thread {
+    private Gson gson;
+
     /**
      * 处理消息
      *
@@ -19,7 +22,16 @@ public class ProcessThread extends Thread {
             enterRoom(msg);
         } else if (msg.startsWith("uno02 roomstatus")) { // 服务器广播的房间状态，如果进入房间失败不会广播
             setRoomStatus(msg);
+        } else if (msg.startsWith("uno02 gamestart")) {
+            gameStart(msg);
         }
+    }
+
+    private static void gameStart(String msg) {
+        msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
+        String[] msgSplit = msg.split(" ");
+
+        // todo 解析 JSON   msgSplit[2];
     }
 
     /**
@@ -127,8 +139,12 @@ public class ProcessThread extends Thread {
         }
     }
 
+    /**
+     * 处理消息队列的线程主循环
+     */
     public void run() {
         OnlineUtil.readyToProcess = true;
+        gson = new Gson();
         System.out.println("[" + TimeUtil.getTimeInMillis() + "] ProcessThread has started");
         //noinspection InfiniteLoopStatement
         while (true) {
