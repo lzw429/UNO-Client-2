@@ -39,6 +39,11 @@ public class HallFrame {
                 try {
                     String roomStatus = data[gameTableList.getSelectedRow()][2].toString();
                     int roomNum = gameTableList.getSelectedRow();
+
+                    if (OnlineUtil.getRoomNum() != null && roomNum == Integer.parseInt(OnlineUtil.getRoomNum())) { // 已位于该房间
+                        JOptionPane.showMessageDialog(null, "已位于该房间", "进入房间", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
                     if (roomStatus.equals("空闲") || roomStatus.equals("等待")) { // 判断是否选择可进入的房间
                         String msg = "uno02 enterroom " + OnlineUtil.getUsername() + " " + roomNum + "\r\n";
                         OnlineUtil.sendMsg(msg);
@@ -60,7 +65,6 @@ public class HallFrame {
                 System.exit(0);
             }
         });
-
     }
 
     /* 构造方法 */
