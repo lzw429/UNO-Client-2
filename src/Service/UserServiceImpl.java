@@ -10,7 +10,7 @@ public class UserServiceImpl implements UserService {
             String msg = "uno01 login " + username + "\r\n";
             synchronized (OnlineUtil.messageLock) {
                 OnlineUtil.sendMsg(msg);
-                OnlineUtil.messageLock.wait();
+                OnlineUtil.messageLock.wait(); // 等待服务器返回结果
                 if (OnlineUtil.getUsername() == null)
                     return false;
             }

@@ -2,15 +2,11 @@ package GUI;
 
 import Service.UserService;
 import Service.UserServiceImpl;
-import Util.GameConstants;
-import Util.OnlineUtil;
-import Util.TimeUtil;
+import Util.*;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import static java.lang.Thread.sleep;
 
 public class ModeFrame {
     private JButton onePlayerButton;
@@ -25,6 +21,8 @@ public class ModeFrame {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 // 在线游戏 按钮 被按下
+                new ListeningThread().start(); // 启动线程,接收消息,放入消息队列
+                new ProcessThread().start(); // 启动线程,处理消息队列
                 // 要求键入用户名
                 String username = JOptionPane.showInputDialog("用户登录");
                 username = GameConstants.removeIllegalChar(username);
@@ -35,7 +33,9 @@ public class ModeFrame {
                 System.out.println("[" + TimeUtil.getTimeInMillis() + "] ModeFrame: username " + username);
                 // 使用用户名登录
                 //noinspection StatementWithEmptyBody
-                while (!OnlineUtil.isReadyToReceive()) {
+                while (true) {
+                    if (OnlineUtil.isReadyToReceive() && OnlineUtil.isReadyToProcess())
+                        break;
                 }
                 UserService userService = new UserServiceImpl();
                 if (userService.login(username)) {// 登录成功
@@ -55,7 +55,6 @@ public class ModeFrame {
     }
 
     public static void main(String[] args) {
-        new OnlineUtil().start(); // 接收来自服务器的消息
         JFrame frame = new JFrame("选择模式");
         frame.setContentPane(new ModeFrame().panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -18,6 +18,7 @@ public class HallFrame {
     private static Object[][] data; // 构造 gameTableList 所用数据
     private static GameService gameService = new GameServiceImpl();
     private static String[] columnNames = {"玩家 1", "玩家 2", "状态"};
+    private static DefaultTableModel gameTableModel;
 
     /* getter & setter */
 
@@ -28,8 +29,6 @@ public class HallFrame {
     public static void setData(Object[][] data) {
         HallFrame.data = data;
     }
-
-    /* 构造方法 */
 
     public HallFrame() {
         enterRoomButton.addMouseListener(new MouseAdapter() {
@@ -61,12 +60,19 @@ public class HallFrame {
                 System.exit(0);
             }
         });
+
+    }
+
+    /* 构造方法 */
+
+    public static DefaultTableModel getGameTableModel() {
+        return gameTableModel;
     }
 
     public static void main(String[] args) throws InterruptedException {
         synchronized (OnlineUtil.messageLock) {
             gameService.getGameTablesData();
-            OnlineUtil.messageLock.wait(3000);
+            OnlineUtil.messageLock.wait(3000); // 等待服务器返回结果
         }
 
         JFrame frame = new JFrame("游戏大厅");
@@ -79,14 +85,12 @@ public class HallFrame {
     private void createUIComponents() {
         // 在此处放置自定义组件创建代码
         // 展示游戏大厅数据
-        DefaultTableModel gameTableModel = new DefaultTableModel(data, columnNames) {
-        };
+        gameTableModel = new DefaultTableModel(data, columnNames);
         gameTableList = new JTable(gameTableModel) {
             public boolean isCellEditable(int row, int column) {
                 // 禁止用户编辑大厅数据
                 return false;
             }
         };
-
     }
 }
