@@ -2,6 +2,7 @@ package GUI.GameWindow;
 
 import Model.Player;
 import Model.UNOCard;
+import Util.OnlineUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,6 +62,14 @@ public class PlayerPanel extends JPanel {
         for (UNOCard unoCard : player.getMyCards()) {
             CardPanel cardPanel = new CardPanel(unoCard);
             (cardPanel).setBounds(origin.x, origin.y, cardPanel.CARDSIZE.width, cardPanel.CARDSIZE.height);
+
+            if (player.getUsername().equals(OnlineUtil.getUsername())) {
+                // 本客户的牌，另加一个 MouseListener，用于打出该牌
+                cardPanel.addMouseListener(new PlayerCardMouseAdapter());
+            } else {
+                // 不是本客户的牌，对该客户暂不可见
+                cardPanel.flipToBack();
+            }
             cardHolder.add(cardPanel, i++);
             cardHolder.moveToFront(cardPanel);
             origin.x += offset;
@@ -138,9 +147,9 @@ public class PlayerPanel extends JPanel {
     class ControlButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (player.isMyTurn()) {
-                if (e.getSource() == draw) {
+                if (e.getSource().equals(draw)) {
                     player.drawCard();
-                } else if (e.getSource() == sayUNO)
+                } else if (e.getSource().equals(sayUNO))
                     player.sayUNO();
             }
         }

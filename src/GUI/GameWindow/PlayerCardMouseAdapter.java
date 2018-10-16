@@ -1,5 +1,8 @@
 package GUI.GameWindow;
 
+import Service.GameService;
+import Service.GameServiceImpl;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,11 +12,12 @@ import java.awt.event.MouseEvent;
  */
 public class PlayerCardMouseAdapter extends MouseAdapter {
     private CardPanel sourceCard;
+    private GameService gameService = new GameServiceImpl();
 
     public void mousePressed(MouseEvent e) {
         sourceCard = (CardPanel) e.getSource();
+        // 打出这张牌
 
-        // todo 打出这张牌
     }
 
     @Override
@@ -35,5 +39,4 @@ public class PlayerCardMouseAdapter extends MouseAdapter {
         point.y += 20;
         sourceCard.setLocation(point);
     }
-
 }

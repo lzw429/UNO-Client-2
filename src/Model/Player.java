@@ -61,7 +61,13 @@ public class Player {
     }
 
     /* 成员方法 */
-    public void playCard() {
+
+    /**
+     * 打出一张牌
+     *
+     * @param number 卡牌号
+     */
+    public void playCard(int number) {
         // todo
     }
 

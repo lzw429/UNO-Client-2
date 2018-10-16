@@ -16,6 +16,7 @@ public class CardPanel extends JPanel {
     public final Color GREEN = new Color(0, 153, 0);
     public final Color YELLOW = new Color(255, 204, 0);
     public final Color BLACK = new Color(0, 0, 0);
+    public final Color GREY = new Color(192, 192, 192);
     public final Color[] colors = {RED, BLUE, GREEN, YELLOW, BLACK};
 
     public final int red = 0;
@@ -133,5 +134,22 @@ public class CardPanel extends JPanel {
     /* getter & setter */
     public Color getColor() {
         return color;
+    }
+
+    /**
+     * 将卡片翻转到背面，无法查看其颜色、数值、类型
+     */
+    public void flipToBack() {
+        Graphics2D g2 = (Graphics2D) getGraphics();
+
+        int cardWidth = CARDSIZE.width;
+        int cardHeight = CARDSIZE.height;
+
+        g2.setColor(Color.WHITE); // 背景色
+        g2.fillRect(0, 0, cardWidth, cardHeight); // 设置背景
+
+        int margin = 5; // 边缘
+        g2.setColor(GREY);
+        g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin); // 填充边缘内的矩形
     }
 }
