@@ -2,7 +2,7 @@ package Util;
 
 public class GameConstants {
     public static final int roomNum = 10; // 大厅房间数量
-    static final int BUFSIZ = 1024; // buffer size
+    static final int BUFSIZ = 8192; // buffer size
 
     public static String removeIllegalChar(String str) {
         try {

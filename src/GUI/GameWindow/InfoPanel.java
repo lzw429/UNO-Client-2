@@ -7,13 +7,13 @@ import java.awt.*;
  * 右侧信息面板
  */
 public class InfoPanel extends JPanel {
-    private String message;
-    private String error;
-    private int remainCards; // 剩余卡牌数
+    private String message; // 消息
+    private String error; // 错误提示
+    private int remainCardNum; // 剩余卡牌数
     private int panelCenter; // 面板中心
     private int[] playedCards; // 各玩家已打出牌数
 
-    // setter
+    /* getter & setter */
 
     public void setMessage(String message) {
         this.message = message;
@@ -25,15 +25,26 @@ public class InfoPanel extends JPanel {
 
     public void setStatistic(int remainCards) {
         // todo playedCards
-        this.remainCards = remainCards;
+        this.remainCardNum = remainCards;
+    }
+
+    public int getRemainCardNum() {
+        return remainCardNum;
+    }
+
+    public void setRemainCardNum(int remainCardNum) {
+        this.remainCardNum = remainCardNum;
     }
 
     /**
      * 构造方法
      */
-    public InfoPanel() {
+    public InfoPanel(int remainCardNum) {
         setPreferredSize(new Dimension(275, 200)); // 设定尺寸
         setOpaque(false);
+        error = "";
+        message = "游戏开始";
+        this.remainCardNum = remainCardNum;
     }
 
     /**
@@ -99,7 +110,7 @@ public class InfoPanel extends JPanel {
         graphics.setFont(statisticFont);
         graphics.drawString(text, xPos, 120);
 
-        text = "剩余卡牌: " + remainCards;
+        text = "剩余卡牌: " + remainCardNum;
         xPos = panelCenter - fontMetrics.stringWidth(text) / 2;
         graphics.drawString(text, xPos, 180);
 

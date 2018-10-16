@@ -5,8 +5,8 @@ import java.util.LinkedList;
 public class Player {
     private String username;
     private boolean isMyTurn;
-    private boolean saidUNO = false;
     private LinkedList<UNOCard> myCards;
+    private boolean saidUNO = false;
     private int playedCards;
 
     /* 构造函数 */

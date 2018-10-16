@@ -32,5 +32,4 @@ public class UNOCard {
     public int getValue() {
         return value;
     }
-
 }

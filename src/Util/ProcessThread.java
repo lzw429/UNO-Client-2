@@ -1,12 +1,21 @@
 package Util;
 
 import GUI.HallFrame;
+import Model.Player;
+import Model.UNOCard;
+import Service.GameService;
+import Service.GameServiceImpl;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ProcessThread extends Thread {
     private Gson gson;
+    private static GameService gameService = new GameServiceImpl();
 
     /**
      * 处理消息
@@ -28,10 +37,24 @@ public class ProcessThread extends Thread {
     }
 
     private static void gameStart(String msg) {
+        Gson gson = new Gson();
         msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
         String[] msgSplit = msg.split(" ");
+        int remainCardNum = Integer.parseInt(msgSplit[2]);
 
-        // todo 解析 JSON   msgSplit[2];
+        Type UNOCardType = new TypeToken<UNOCard>() {
+        }.getType();
+        UNOCard firstCard = gson.fromJson(msgSplit[3], UNOCardType);
+
+        Type playerType = new TypeToken<Player>() {
+        }.getType();
+        List<Player> playerList = new CopyOnWriteArrayList<>();
+        for (int i = 4; i < msgSplit.length; i++) {
+            Player player = gson.fromJson(msgSplit[i], playerType);
+            playerList.add(player);
+        }
+        gameService.gameStart(remainCardNum, firstCard, playerList);
+        // todo 构造 GameTable
     }
 
     /**

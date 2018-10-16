@@ -1,20 +1,17 @@
 package Service;
 
+import GUI.GameWindow.CardPanel;
 import GUI.GameWindow.GameFrame;
+import GUI.GameWindow.GamePanel;
 import Model.GameTable;
+import Model.Player;
+import Model.UNOCard;
 import Util.OnlineUtil;
+
+import java.util.List;
 
 public class GameServiceImpl implements GameService {
     private static GameTable gameTable = null;
-
-    public void createGameTable() {
-        if (gameTable == null) {
-            gameTable = new GameTable(GameTable.ONLINE); // 从服务器获取当前对局信息
-        } else {
-            System.out.println("GameService: game table already exists");
-        }
-        GameFrame.main(new String[10]); // 打开游戏窗口
-    }
 
     @Override
     public void getGameTablesData() {
@@ -24,5 +21,12 @@ public class GameServiceImpl implements GameService {
             e.printStackTrace();
             System.out.println("GameService: get game tables data exception");
         }
+    }
+
+    @Override
+    public void gameStart(int remainCardNum, UNOCard firstCard, List<Player> playerList) {
+        // 修改视图层
+        GameFrame.setGamePanel(new GamePanel(remainCardNum, new CardPanel(firstCard), playerList));
+        GameFrame.main(new String[10]); // 打开游戏窗口
     }
 }

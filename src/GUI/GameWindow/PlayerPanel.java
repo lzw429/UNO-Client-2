@@ -30,7 +30,13 @@ public class PlayerPanel extends JPanel {
         cardHolder.setPreferredSize(new Dimension(600, 175));
 
         // 设置变量
-        setPlayer(player);
+        this.player = player;
+        setCards();
+        setControlPanel();
+        layout.add(cardHolder);
+        layout.add(Box.createHorizontalStrut(40));
+        layout.add(controlBox);
+        add(layout);
 
         // 注册监听器
         controlButtonHandler = new ControlButtonHandler();
@@ -38,15 +44,6 @@ public class PlayerPanel extends JPanel {
         sayUNO.addActionListener(controlButtonHandler);
     }
 
-    /* getter & setter */
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 
     /* 成员方法 */
 
@@ -62,7 +59,7 @@ public class PlayerPanel extends JPanel {
 
         int i = 0;
         for (UNOCard unoCard : player.getMyCards()) {
-            CardPanelC cardPanel = new CardPanelC(unoCard);
+            CardPanel cardPanel = new CardPanel(unoCard);
             (cardPanel).setBounds(origin.x, origin.y, cardPanel.CARDSIZE.width, cardPanel.CARDSIZE.height);
             cardHolder.add(cardPanel, i++);
             cardHolder.moveToFront(cardPanel);
