@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TablePanel extends JPanel {
-    private CardPanel topCard;
+    private CardFrontPanel topCard;
     private JPanel table;
     private InfoPanel infoPanel;
 
-    public TablePanel(int remainCardNum, CardPanel firstCard) {
+    public TablePanel(int remainCardNum, CardFrontPanel firstCard) {
         setOpaque(false);
         setLayout(new GridBagLayout());
 
@@ -49,7 +49,7 @@ public class TablePanel extends JPanel {
         add(infoPanel, gridBagConstraints);
     }
 
-    public void setPlayedCard(CardPanel playedCard) {
+    public void setPlayedCard(CardFrontPanel playedCard) {
         table.removeAll();
         topCard = playedCard;
         setTable();
@@ -57,7 +57,7 @@ public class TablePanel extends JPanel {
         setBackgroundColor(playedCard);
     }
 
-    private void setBackgroundColor(CardPanel playedCard) {
+    private void setBackgroundColor(CardFrontPanel playedCard) {
         Color background = playedCard.getColor();
         table.setBackground(background);
     }

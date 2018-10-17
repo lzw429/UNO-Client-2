@@ -11,11 +11,11 @@ import java.awt.event.MouseEvent;
  * 玩家当前持有卡牌的鼠标监听器
  */
 public class PlayerCardMouseAdapter extends MouseAdapter {
-    private CardPanel sourceCard;
+    private CardFrontPanel sourceCard;
     private GameService gameService = new GameServiceImpl();
 
     public void mousePressed(MouseEvent e) {
-        sourceCard = (CardPanel) e.getSource();
+        sourceCard = (CardFrontPanel) e.getSource();
         // 打出这张牌
 
     }
@@ -25,7 +25,7 @@ public class PlayerCardMouseAdapter extends MouseAdapter {
         super.mouseEntered(e);
 
         // 调整位置
-        sourceCard = (CardPanel) e.getSource();
+        sourceCard = (CardFrontPanel) e.getSource();
         Point p = sourceCard.getLocation();
         p.y -= 20;
         sourceCard.setLocation(p);
@@ -34,7 +34,7 @@ public class PlayerCardMouseAdapter extends MouseAdapter {
     @Override
     public void mouseExited(MouseEvent e) {
         // 调整位置
-        sourceCard = (CardPanel) e.getSource();
+        sourceCard = (CardFrontPanel) e.getSource();
         Point point = sourceCard.getLocation();
         point.y += 20;
         sourceCard.setLocation(point);

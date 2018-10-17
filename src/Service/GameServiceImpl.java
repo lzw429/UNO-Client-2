@@ -1,6 +1,6 @@
 package Service;
 
-import GUI.GameWindow.CardPanel;
+import GUI.GameWindow.CardFrontPanel;
 import GUI.GameWindow.GameFrame;
 import GUI.GameWindow.GamePanel;
 import Model.GameTable;
@@ -26,7 +26,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void gameStart(int remainCardNum, UNOCard firstCard, List<Player> playerList) {
         // 修改视图层
-        GameFrame.setGamePanel(new GamePanel(remainCardNum, new CardPanel(firstCard), playerList));
+        GameFrame.setGamePanel(new GamePanel(remainCardNum, new CardFrontPanel(firstCard), playerList));
         GameFrame.main(new String[10]); // 打开游戏窗口
     }
 }

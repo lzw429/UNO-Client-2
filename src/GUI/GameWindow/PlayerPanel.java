@@ -40,9 +40,11 @@ public class PlayerPanel extends JPanel {
         add(layout);
 
         // 注册监听器
-        controlButtonHandler = new ControlButtonHandler();
-        draw.addActionListener(controlButtonHandler);
-        sayUNO.addActionListener(controlButtonHandler);
+        if (isThisClient()) {
+            controlButtonHandler = new ControlButtonHandler();
+            draw.addActionListener(controlButtonHandler);
+            sayUNO.addActionListener(controlButtonHandler);
+        }
     }
 
 
@@ -60,16 +62,16 @@ public class PlayerPanel extends JPanel {
 
         int i = 0;
         for (UNOCard unoCard : player.getMyCards()) {
-            CardPanel cardPanel = new CardPanel(unoCard);
-            (cardPanel).setBounds(origin.x, origin.y, cardPanel.CARDSIZE.width, cardPanel.CARDSIZE.height);
-
-            if (player.getUsername().equals(OnlineUtil.getUsername())) {
+            CardPanel cardPanel;
+            if (isThisClient()) {
                 // 本客户的牌，另加一个 MouseListener，用于打出该牌
+                cardPanel = new CardFrontPanel(unoCard);
                 cardPanel.addMouseListener(new PlayerCardMouseAdapter());
             } else {
                 // 不是本客户的牌，对该客户暂不可见
-                cardPanel.flipToBack();
+                cardPanel = new CardBackPanel(unoCard);
             }
+            (cardPanel).setBounds(origin.x, origin.y, cardPanel.CARDSIZE.width, cardPanel.CARDSIZE.height);
             cardHolder.add(cardPanel, i++);
             cardHolder.moveToFront(cardPanel);
             origin.x += offset;
@@ -81,28 +83,33 @@ public class PlayerPanel extends JPanel {
      * 设置控制区
      */
     public void setControlPanel() {
-        draw = new JButton("抽牌");
-        sayUNO = new JButton("说 UNO");
+        if (isThisClient()) {
+            draw = new JButton("抽牌");
+            sayUNO = new JButton("说 UNO");
+
+            // 设置组件属性
+            draw.setBackground(new Color(79, 129, 189));
+            draw.setFont(new Font("Arial", Font.BOLD, 20));
+            draw.setFocusable(false);
+
+            sayUNO.setBackground(new Color(149, 55, 53));
+            sayUNO.setFont(new Font("Arial", Font.BOLD, 20));
+            sayUNO.setFocusable(false);
+        }
+
         nameLabel = new JLabel(player.getUsername());
-
-        // 设置组件属性
-        draw.setBackground(new Color(79, 129, 189));
-        draw.setFont(new Font("Arial", Font.BOLD, 20));
-        draw.setFocusable(false);
-
-        sayUNO.setBackground(new Color(149, 55, 53));
-        sayUNO.setFont(new Font("Arial", Font.BOLD, 20));
-        sayUNO.setFocusable(false);
-
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setFont(new Font("Arial", Font.BOLD, 15));
 
-        // 添加组件到控制区
         controlBox = Box.createVerticalBox();
         controlBox.add(nameLabel);
-        controlBox.add(draw);
-        controlBox.add(Box.createVerticalStrut(15));
-        controlBox.add(sayUNO);
+
+        if (isThisClient()) {
+            // 添加组件到控制区
+            controlBox.add(draw);
+            controlBox.add(Box.createVerticalStrut(15));
+            controlBox.add(sayUNO);
+        }
     }
 
     /**
@@ -153,5 +160,9 @@ public class PlayerPanel extends JPanel {
                     player.sayUNO();
             }
         }
+    }
+
+    private boolean isThisClient() {
+        return player.getUsername().equals(OnlineUtil.getUsername());
     }
 }
