@@ -17,17 +17,6 @@ public class CardPanel extends JPanel {
     public final Color BLACK = new Color(0, 0, 0);
     public final Color[] colors = {RED, BLUE, GREEN, YELLOW, BLACK};
 
-    public final int red = 0;
-    public final int blue = 1;
-    public final int green = 2;
-    public final int yellow = 3;
-    public final int black = 4;
-
-    // 卡片类型
-    public final int NUMBERS = 1;
-    public final int ACTION = 2;
-    public final int WILD = 3;
-
     // 动作牌字符
     public final Character charREVERSE = (char) 8634; // 十进制
     public final Character charSKIP = (char) Integer.parseInt("2718", 16); // Unicode
@@ -40,6 +29,19 @@ public class CardPanel extends JPanel {
     // 万能牌
     public final String W_COLORPICKER = "W";
     public final String W_DRAW4PLUS = "4+";
+    public final String[] actionTypes = {REVERSE, SKIP, DRAW2PLUS}; // 动作牌
+    public final String[] wildTypes = {W_COLORPICKER, W_DRAW4PLUS}; // 万能牌
+
+    public final int red = 0;
+    public final int blue = 1;
+    public final int green = 2;
+    public final int yellow = 3;
+    public final int black = 4;
+
+    // 卡片类型
+    public final int NUMBERS = 1;
+    public final int ACTION = 2;
+    public final int WILD = 3;
 
     // 卡片尺寸
     public final int WIDTH = 50;
@@ -62,9 +64,18 @@ public class CardPanel extends JPanel {
     // 构造方法
     public CardPanel(UNOCard unoCard) {
         this.color = colors[unoCard.getColor()];
-        this.value = Integer.toString(unoCard.getValue());
         this.type = unoCard.getType();
-
+        switch (unoCard.getType()) {
+            case NUMBERS:
+                this.value = String.valueOf(unoCard.getValue());
+                break;
+            case ACTION:
+                this.value = actionTypes[unoCard.getValue()];
+                break;
+            case WILD:
+                this.value = wildTypes[unoCard.getValue()];
+                break;
+        }
         this.setPreferredSize(CARDSIZE); // 卡片大小
         this.setBorder(defaultBorder); // 卡片边界
 

@@ -1,5 +1,8 @@
 package GUI.GameWindow;
 
+import Model.Player;
+import Service.GameService;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,10 +21,12 @@ public class InfoPanel extends JPanel {
 
     public void setMessage(String message) {
         this.message = message;
+        this.repaint();
     }
 
     public void setError(String error) {
         this.error = error;
+        this.repaint();
     }
 
     public void setStatistic(int remainCards) {
@@ -35,6 +40,7 @@ public class InfoPanel extends JPanel {
 
     public void setRemainCardNum(int remainCardNum) {
         this.remainCardNum = remainCardNum;
+        this.repaint();
     }
 
     /**
@@ -44,7 +50,12 @@ public class InfoPanel extends JPanel {
         setPreferredSize(new Dimension(275, 200)); // 设定尺寸
         setOpaque(false);
         error = "";
-        message = "游戏开始";
+        message = "游戏开始"; // 不太可能用到此句
+        for (Player player : GameService.getGameTable().getPlayers()) {
+            if (player.isMyTurn()) {
+                message = "轮到 " + player.getUsername();
+            }
+        }
         playedCards = new int[PLAYERNUM];
         this.remainCardNum = remainCardNum;
     }

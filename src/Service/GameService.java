@@ -30,10 +30,10 @@ public class GameService {
 
 
     public void gameStart(int remainCardNum, UNOCard firstCard, List<Player> playerList) {
-        // 构造模型层 GameTable
+        // 模型层 GameTable
         gameTable = new GameTable(GameTable.ONLINE, remainCardNum, firstCard, playerList);
 
-        // 视图通过模型渲染
+        // 视图层
         GameFrame.setGamePanel(new GamePanel(gameTable));
         GameFrame.main(new String[10]); // 打开游戏窗口
     }

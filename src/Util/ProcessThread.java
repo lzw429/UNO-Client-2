@@ -58,6 +58,8 @@ public class ProcessThread extends Thread {
             drawCardResponse(msg);
         } else if (msg.startsWith("uno02 turn")) { // 游戏轮次
             nextTurnResponse(msg);
+        } else if (msg.startsWith("uno02 remaincard")) {
+            remainCardResponse(msg);
         }
     }
 
@@ -66,6 +68,7 @@ public class ProcessThread extends Thread {
         String[] msgSplit = msg.split(" ");
         int remainCardNum = Integer.parseInt(msgSplit[2]);
 
+        // 将字符串组装为参数
         UNOCard firstCard = gson.fromJson(msgSplit[3], UNOCardType);
         List<Player> playerList = new CopyOnWriteArrayList<>();
         for (int i = 4; i < msgSplit.length; i++) {
@@ -208,12 +211,28 @@ public class ProcessThread extends Thread {
         // 模型层
         try {
             GameService.getGameTable().setTurn(username);
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            System.out.println("ProcessThread: game table is null");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ProcessThread: nextTurnResponse exception");
         }
-        // todo 视图层
-        // GameFrame.getGamePanel().getTablePanel().getInfoPanel()
+        // 视图层
+        GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessage("轮到 " + username);
+    }
+
+    private static void remainCardResponse(String msg) {
+        msg = msg.substring(0, msg.length() - 2);
+        String[] msgSplit = msg.split(" ");
+
+        int remainCardNum = Integer.parseInt(msgSplit[2]);
+        // 模型层
+        try {
+            GameService.getGameTable().setRemainCardNum(remainCardNum);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ProcessThread: remainCardResponse exception");
+        }
+        // 视图层
+        GameFrame.getGamePanel().getTablePanel().getInfoPanel().setRemainCardNum(remainCardNum);
     }
 
 }
