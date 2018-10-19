@@ -1,5 +1,6 @@
 package Util;
 
+import GUI.GameWindow.CardFrontPanel;
 import GUI.GameWindow.GameFrame;
 import GUI.HallFrame;
 import Model.GameTable;
@@ -60,6 +61,8 @@ public class ProcessThread extends Thread {
             nextTurnResponse(msg);
         } else if (msg.startsWith("uno02 remaincard")) {
             remainCardResponse(msg);
+        } else if (msg.startsWith("uno02 playcard")) {
+            playCardResponse(msg);
         }
     }
 
@@ -233,6 +236,40 @@ public class ProcessThread extends Thread {
         }
         // 视图层
         GameFrame.getGamePanel().getTablePanel().getInfoPanel().setRemainCardNum(remainCardNum);
+    }
+
+    private static void playCardResponse(String msg) {// uno02 playcard username topCardJson playerJson
+        msg = msg.substring(0, msg.length() - 2);
+        String[] msgSplit = msg.split(" ");
+
+        // 将字符串组装为参数
+        String username = msgSplit[2];
+        String topCardJson = msgSplit[3];
+        UNOCard topCard = gson.fromJson(topCardJson, UNOCardType);
+        List<Player> playerList = new CopyOnWriteArrayList<>();
+        for (int i = 4; i < msgSplit.length; i++) {
+            Player player = gson.fromJson(msgSplit[i], playerType);
+            playerList.add(player);
+        }
+
+        // 模型层
+        GameService.getGameTable().setPlayers(playerList);
+        // 视图层
+        GameFrame.getGamePanel().refreshPanel(GameService.getGameTable()); // 修改玩家手中的牌
+        GameFrame.getGamePanel().getTablePanel().setPlayedCard(new CardFrontPanel(topCard)); // 修改牌桌上的牌
+
+//        Player player = GameService.getGameTable().getPlayerByUsername(username);
+//        if (player.getMyCards().size() == 1 && !player.isSaidUNO()) {
+//            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setError(username +" 忘记说 UNO 啦");
+//        }
+
+//        if (p.getTotalCards() == 1 && !p.getSaidUNO()) {
+//            infoPanel.setError(p.getName() + " Forgot to say UNO");
+//            p.obtainCard(getCard());
+//            p.obtainCard(getCard());
+//        }else if(p.getTotalCards()>2){
+//            p.setSaidUNOFalse();
+//        }
     }
 
 }

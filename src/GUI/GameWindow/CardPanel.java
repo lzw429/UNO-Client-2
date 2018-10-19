@@ -39,9 +39,9 @@ public class CardPanel extends JPanel {
     public final int black = 4;
 
     // 卡片类型
-    public final int NUMBERS = 1;
-    public final int ACTION = 2;
-    public final int WILD = 3;
+    public static final int NUMBERS = 1;
+    public static final int ACTION = 2;
+    public static final int WILD = 3;
 
     // 卡片尺寸
     public final int WIDTH = 50;
@@ -54,15 +54,18 @@ public class CardPanel extends JPanel {
     // 默认偏移
     public final int OFFSET = 71;
 
+    protected int number; // 牌号
     protected Color color; // 牌的颜色
     protected String value; // 牌上的数字或牌的功能
     protected int type; // 牌的类型
+    protected Color wildChosenColor; // 万能牌选择的颜色
 
     protected Border defaultBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.white, Color.gray);
     protected Border focusedBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.black, Color.gray);
 
     // 构造方法
     public CardPanel(UNOCard unoCard) {
+        this.number = unoCard.getNumber();
         this.color = colors[unoCard.getColor()];
         this.type = unoCard.getType();
         switch (unoCard.getType()) {
@@ -103,7 +106,27 @@ public class CardPanel extends JPanel {
     }
 
     /* getter & setter */
+    public int getNumber() {
+        return number;
+    }
+
     public Color getColor() {
         return color;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public Color getWildChosenColor() {
+        return wildChosenColor;
+    }
+
+    public void setWildChosenColor(Color wildChosenColor) {
+        this.wildChosenColor = wildChosenColor;
     }
 }

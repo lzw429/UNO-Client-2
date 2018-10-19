@@ -14,10 +14,6 @@ public class TablePanel extends JPanel {
         return topCard;
     }
 
-    public void setTopCard(CardFrontPanel topCard) {
-        this.topCard = topCard;
-    }
-
     public JPanel getTable() {
         return table;
     }
@@ -75,6 +71,11 @@ public class TablePanel extends JPanel {
         add(infoPanel, gridBagConstraints);
     }
 
+    /**
+     * 将一张牌放置在牌桌上
+     *
+     * @param playedCard 打出的牌
+     */
     public void setPlayedCard(CardFrontPanel playedCard) {
         table.removeAll();
         topCard = playedCard;
@@ -83,6 +84,11 @@ public class TablePanel extends JPanel {
         setBackgroundColor(playedCard);
     }
 
+    /**
+     * 将牌桌颜色设定为指定牌的颜色
+     *
+     * @param playedCard 打出的牌
+     */
     private void setBackgroundColor(CardFrontPanel playedCard) {
         Color background = playedCard.getColor();
         table.setBackground(background);

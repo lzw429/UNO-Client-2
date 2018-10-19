@@ -77,7 +77,7 @@ public class HallFrame {
 
     public static void main(String[] args) throws InterruptedException {
         synchronized (OnlineUtil.messageLock) {
-            gameService.getGameTablesData();
+            gameService.gameTableRequest();
             OnlineUtil.messageLock.wait(3000); // 等待服务器返回结果
         }
 

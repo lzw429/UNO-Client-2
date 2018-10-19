@@ -16,7 +16,7 @@ public class PlayerCardMouseAdapter extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         sourceCard = (CardFrontPanel) e.getSource();
         // 打出这张牌
-
+        gameService.playCardRequest(sourceCard);
     }
 
     @Override
