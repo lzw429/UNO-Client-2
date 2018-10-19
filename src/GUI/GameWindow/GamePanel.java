@@ -1,5 +1,6 @@
 package GUI.GameWindow;
 
+import Model.GameTable;
 import Model.Player;
 import Model.UNOCard;
 import Util.OnlineUtil;
@@ -14,16 +15,20 @@ public class GamePanel extends JPanel {
     private PlayerPanel playerPanel2; // 本客户
     private TablePanel tablePanel; // 牌桌
 
-    public GamePanel(int remainCardNum, CardFrontPanel firstCardPanel, List<Player> playerList) {
+    public GamePanel(GameTable gameTable) {
+        int remainCardNum = gameTable.getRemainCardNum();
+        List<Player> playerList = gameTable.getPlayers();
+        CardFrontPanel firstCardPanel = new CardFrontPanel(gameTable.getFirstCard());
+
         setPreferredSize(new Dimension(960, 720));
         setBackground(new Color(30, 36, 40));
         setLayout(new BorderLayout());
 
-        for (Player aPlayerList : playerList) {
-            if (aPlayerList.getUsername().equals(OnlineUtil.getUsername())) { // 该 player 对象对应本用户
-                playerPanel2 = new PlayerPanel(aPlayerList);
+        for (Player player : playerList) {
+            if (player.getUsername().equals(OnlineUtil.getUsername())) { // 该 player 对象对应本用户
+                playerPanel2 = new PlayerPanel(player);
             } else {
-                playerPanel1 = new PlayerPanel(aPlayerList);
+                playerPanel1 = new PlayerPanel(player);
             }
         }
         tablePanel = new TablePanel(remainCardNum, firstCardPanel);
@@ -35,8 +40,47 @@ public class GamePanel extends JPanel {
         add(playerPanel2, BorderLayout.SOUTH);
     }
 
+    /* getter & setter */
+
+    public PlayerPanel getPlayerPanel1() {
+        return playerPanel1;
+    }
+
+    public void setPlayerPanel1(PlayerPanel playerPanel1) {
+        this.playerPanel1 = playerPanel1;
+    }
+
+    public PlayerPanel getPlayerPanel2() {
+        return playerPanel2;
+    }
+
+    public void setPlayerPanel2(PlayerPanel playerPanel2) {
+        this.playerPanel2 = playerPanel2;
+    }
+
+    public TablePanel getTablePanel() {
+        return tablePanel;
+    }
+
+    public void setTablePanel(TablePanel tablePanel) {
+        this.tablePanel = tablePanel;
+    }
+
+    /* 成员方法 */
     boolean isValidMove(UNOCard unoCard) {
         // todo code
         return false;
+    }
+
+    public void refreshPanel(GameTable gameTable) {
+        for (Player player : gameTable.getPlayers()) {
+            if (OnlineUtil.isThisClient(player))
+                playerPanel2.setCards(player);
+            else
+                playerPanel1.setCards(player);
+        }
+
+        tablePanel.revalidate();
+        revalidate();
     }
 }

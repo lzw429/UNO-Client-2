@@ -1,5 +1,7 @@
 package Util;
 
+import Model.Player;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -117,5 +119,9 @@ public class OnlineUtil {
             System.out.println("OnlineClient: send message exception");
             return false;
         }
+    }
+
+    public static boolean isThisClient(Player player) {
+        return player.getUsername().equals(getUsername());
     }
 }

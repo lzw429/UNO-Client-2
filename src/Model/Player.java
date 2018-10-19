@@ -71,10 +71,6 @@ public class Player {
         // todo
     }
 
-    public void drawCard() {
-        // todo
-    }
-
     public void sayUNO() {
         // todo
     }

@@ -26,9 +26,9 @@ public class ListeningThread extends Thread {
                 builder.append(new String(chars, 0, len));
                 String msg = builder.toString();
                 String[] msgSplit = msg.split("\f");
-                for (String aMsgSplit : msgSplit) {
-                    OnlineUtil.getMessageList().put(aMsgSplit); // 阻塞队列
-                    System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: Receive from server, len = " + msg.length() + ": " + aMsgSplit);
+                for (String oneMsg : msgSplit) {
+                    OnlineUtil.getMessageList().put(oneMsg); // 阻塞队列
+                    System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: Receive from server, len = " + oneMsg.length() + ": " + oneMsg);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

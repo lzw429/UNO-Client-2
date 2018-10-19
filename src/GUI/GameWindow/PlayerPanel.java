@@ -2,6 +2,7 @@ package GUI.GameWindow;
 
 import Model.Player;
 import Model.UNOCard;
+import Service.GameService;
 import Util.OnlineUtil;
 
 import javax.swing.*;
@@ -10,8 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PlayerPanel extends JPanel {
-    private Player player;
-
     private Box layout;
     private JLayeredPane cardHolder;
     private Box controlBox; // 控制区
@@ -31,16 +30,15 @@ public class PlayerPanel extends JPanel {
         cardHolder.setPreferredSize(new Dimension(600, 175));
 
         // 设置变量
-        this.player = player;
-        setCards();
-        setControlPanel();
+        setCards(player);
+        setControlPanel(player);
         layout.add(cardHolder);
         layout.add(Box.createHorizontalStrut(40));
         layout.add(controlBox);
         add(layout);
 
         // 注册监听器
-        if (isThisClient()) {
+        if (OnlineUtil.isThisClient(player)) {
             controlButtonHandler = new ControlButtonHandler();
             draw.addActionListener(controlButtonHandler);
             sayUNO.addActionListener(controlButtonHandler);
@@ -53,7 +51,7 @@ public class PlayerPanel extends JPanel {
     /**
      * 设置卡牌区
      */
-    public void setCards() {
+    public void setCards(Player player) {
         cardHolder.removeAll();
 
         // 原点在中心
@@ -63,7 +61,7 @@ public class PlayerPanel extends JPanel {
         int i = 0;
         for (UNOCard unoCard : player.getMyCards()) {
             CardPanel cardPanel;
-            if (isThisClient()) {
+            if (OnlineUtil.isThisClient(player)) {
                 // 本客户的牌，另加一个 MouseListener，用于打出该牌
                 cardPanel = new CardFrontPanel(unoCard);
                 cardPanel.addMouseListener(new PlayerCardMouseAdapter());
@@ -82,8 +80,8 @@ public class PlayerPanel extends JPanel {
     /**
      * 设置控制区
      */
-    public void setControlPanel() {
-        if (isThisClient()) {
+    public void setControlPanel(Player player) {
+        if (OnlineUtil.isThisClient(player)) {
             draw = new JButton("抽牌");
             sayUNO = new JButton("说 UNO");
 
@@ -104,7 +102,7 @@ public class PlayerPanel extends JPanel {
         controlBox = Box.createVerticalBox();
         controlBox.add(nameLabel);
 
-        if (isThisClient()) {
+        if (OnlineUtil.isThisClient(player)) {
             // 添加组件到控制区
             controlBox.add(draw);
             controlBox.add(Box.createVerticalStrut(15));
@@ -153,16 +151,13 @@ public class PlayerPanel extends JPanel {
      */
     class ControlButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (player.isMyTurn()) {
-                if (e.getSource().equals(draw)) {
-                    player.drawCard();
-                } else if (e.getSource().equals(sayUNO))
-                    player.sayUNO();
-            }
+            GameService gameService = new GameService();
+            if (e.getSource().equals(draw)) {
+                gameService.drawCardRequest();
+            } else if (e.getSource().equals(sayUNO))
+                gameService.sayUNORequest();
         }
     }
 
-    private boolean isThisClient() {
-        return player.getUsername().equals(OnlineUtil.getUsername());
-    }
+
 }

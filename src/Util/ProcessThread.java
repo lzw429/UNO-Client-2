@@ -1,10 +1,11 @@
 package Util;
 
+import GUI.GameWindow.GameFrame;
 import GUI.HallFrame;
+import Model.GameTable;
 import Model.Player;
 import Model.UNOCard;
 import Service.GameService;
-import Service.GameServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,8 +15,28 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ProcessThread extends Thread {
-    private Gson gson;
-    private static GameService gameService = new GameServiceImpl();
+    private static Gson gson = new Gson();
+    private static GameService gameService = new GameService();
+    private static Type UNOCardType = new TypeToken<UNOCard>() {
+    }.getType();
+    private static Type playerType = new TypeToken<Player>() {
+    }.getType();
+
+    /**
+     * 处理消息队列的线程主循环
+     */
+    public void run() {
+        OnlineUtil.readyToProcess = true;
+        gson = new Gson();
+        System.out.println("[" + TimeUtil.getTimeInMillis() + "] ProcessThread has started");
+        //noinspection InfiniteLoopStatement
+        while (true) {
+            String msg = OnlineUtil.getMessageList().poll(); // 阻塞队列
+            if (msg != null) {
+                processMsg(msg);
+            }
+        }
+    }
 
     /**
      * 处理消息
@@ -31,30 +52,27 @@ public class ProcessThread extends Thread {
             enterRoom(msg);
         } else if (msg.startsWith("uno02 roomstatus")) { // 服务器广播的房间状态，如果进入房间失败不会广播
             setRoomStatus(msg);
-        } else if (msg.startsWith("uno02 gamestart")) {
-            gameStart(msg);
+        } else if (msg.startsWith("uno02 gamestart")) { // 游戏初始化
+            gameStartResponse(msg);
+        } else if (msg.startsWith("uno02 drawcard")) { // 抽牌操作
+            drawCardResponse(msg);
+        } else if (msg.startsWith("uno02 turn")) { // 游戏轮次
+            nextTurnResponse(msg);
         }
     }
 
-    private static void gameStart(String msg) {
-        Gson gson = new Gson();
+    private static void gameStartResponse(String msg) {
         msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
         String[] msgSplit = msg.split(" ");
         int remainCardNum = Integer.parseInt(msgSplit[2]);
 
-        Type UNOCardType = new TypeToken<UNOCard>() {
-        }.getType();
         UNOCard firstCard = gson.fromJson(msgSplit[3], UNOCardType);
-
-        Type playerType = new TypeToken<Player>() {
-        }.getType();
         List<Player> playerList = new CopyOnWriteArrayList<>();
         for (int i = 4; i < msgSplit.length; i++) {
             Player player = gson.fromJson(msgSplit[i], playerType);
             playerList.add(player);
         }
         gameService.gameStart(remainCardNum, firstCard, playerList);
-        // todo 构造 GameTable
     }
 
     /**
@@ -136,9 +154,10 @@ public class ProcessThread extends Thread {
         String[] msgSplit = msg.split(" ");
 
         if (msgSplit[3].equals("1")) { // 服务器：进入房间成功
-            OnlineUtil.setRoomNum(String.valueOf(OnlineUtil.roomNum)); // 设置客户端房间号
+            OnlineUtil.setRoomNum(msgSplit[2]); // 设置客户端房间号
             // 进一步处理在 setRoomStatus 方法中
         } else if (msgSplit[3].equals("0")) { // 服务器：进入房间失败
+            OnlineUtil.setRoomNum(null);
             JOptionPane.showMessageDialog(null, "请稍后重试...", "进入房间", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -162,18 +181,39 @@ public class ProcessThread extends Thread {
         }
     }
 
-    /**
-     * 处理消息队列的线程主循环
-     */
-    public void run() {
-        OnlineUtil.readyToProcess = true;
-        gson = new Gson();
-        System.out.println("[" + TimeUtil.getTimeInMillis() + "] ProcessThread has started");
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            String msg = OnlineUtil.getMessageList().poll(); // 阻塞队列
-            if (msg != null)
-                processMsg(msg);
+    private static void drawCardResponse(String msg) {
+        msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
+        String[] msgSplit = msg.split(" ");
+        try {
+            String username = msgSplit[2];
+            UNOCard newCard = gson.fromJson(msgSplit[3], UNOCardType);
+
+            // 模型层
+            GameTable gameTable = GameService.getGameTable();
+            Player player = gameTable.getPlayerByUsername(username);
+            player.getMyCards().add(newCard);
+            // 视图层
+            GameFrame.getGamePanel().refreshPanel(GameService.getGameTable());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ProcessThread: draw card response exception");
         }
     }
+
+    private static void nextTurnResponse(String msg) {
+        msg = msg.substring(0, msg.length() - 2); // 去除字符串末尾 \r\n
+        String[] msgSplit = msg.split(" ");
+
+        String username = msgSplit[2];
+        // 模型层
+        try {
+            GameService.getGameTable().setTurn(username);
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+            System.out.println("ProcessThread: game table is null");
+        }
+        // todo 视图层
+        // GameFrame.getGamePanel().getTablePanel().getInfoPanel()
+    }
+
 }

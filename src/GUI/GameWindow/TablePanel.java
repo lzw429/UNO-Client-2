@@ -8,6 +8,32 @@ public class TablePanel extends JPanel {
     private JPanel table;
     private InfoPanel infoPanel;
 
+    /* getter & setter */
+
+    public CardFrontPanel getTopCard() {
+        return topCard;
+    }
+
+    public void setTopCard(CardFrontPanel topCard) {
+        this.topCard = topCard;
+    }
+
+    public JPanel getTable() {
+        return table;
+    }
+
+    public void setTable(JPanel table) {
+        this.table = table;
+    }
+
+    public InfoPanel getInfoPanel() {
+        return infoPanel;
+    }
+
+    public void setInfoPanel(InfoPanel infoPanel) {
+        this.infoPanel = infoPanel;
+    }
+
     public TablePanel(int remainCardNum, CardFrontPanel firstCard) {
         setOpaque(false);
         setLayout(new GridBagLayout());

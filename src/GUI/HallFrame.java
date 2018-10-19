@@ -1,7 +1,6 @@
 package GUI;
 
 import Service.GameService;
-import Service.GameServiceImpl;
 import Util.OnlineUtil;
 
 import javax.swing.*;
@@ -16,7 +15,7 @@ public class HallFrame {
     private JTable gameTableList;
     private JScrollPane scrollPane;
     private static Object[][] data; // 构造 gameTableList 所用数据
-    private static GameService gameService = new GameServiceImpl();
+    private static GameService gameService = new GameService();
     private static String[] columnNames = {"玩家 1", "玩家 2", "状态"};
     private static DefaultTableModel gameTableModel;
 

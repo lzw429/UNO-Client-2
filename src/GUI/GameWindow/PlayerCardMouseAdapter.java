@@ -1,7 +1,6 @@
 package GUI.GameWindow;
 
 import Service.GameService;
-import Service.GameServiceImpl;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -12,7 +11,7 @@ import java.awt.event.MouseEvent;
  */
 public class PlayerCardMouseAdapter extends MouseAdapter {
     private CardFrontPanel sourceCard;
-    private GameService gameService = new GameServiceImpl();
+    private GameService gameService = new GameService();
 
     public void mousePressed(MouseEvent e) {
         sourceCard = (CardFrontPanel) e.getSource();

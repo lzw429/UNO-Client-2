@@ -12,6 +12,7 @@ public class InfoPanel extends JPanel {
     private int remainCardNum; // 剩余卡牌数
     private int panelCenter; // 面板中心
     private int[] playedCards; // 各玩家已打出牌数
+    private final int PLAYERNUM = 2;
 
     /* getter & setter */
 
@@ -44,6 +45,7 @@ public class InfoPanel extends JPanel {
         setOpaque(false);
         error = "";
         message = "游戏开始";
+        playedCards = new int[PLAYERNUM];
         this.remainCardNum = remainCardNum;
     }
 
@@ -117,8 +119,10 @@ public class InfoPanel extends JPanel {
         statisticFont = new Font("Calibri", Font.PLAIN, 20);
         graphics.setFont(statisticFont);
         fontMetrics = this.getFontMetrics(statisticFont);
+
         // 已打出数量
         // todo  text = "";
+        //   text = "您 : " + playedCards[1] + "  "++ " : " +;
         xPos = panelCenter - fontMetrics.stringWidth(text) / 2;
     }
 }

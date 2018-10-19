@@ -1,7 +1,6 @@
 package GUI;
 
 import Service.UserService;
-import Service.UserServiceImpl;
 import Util.*;
 
 import javax.swing.*;
@@ -37,7 +36,7 @@ public class ModeFrame {
                     if (OnlineUtil.isReadyToReceive() && OnlineUtil.isReadyToProcess())
                         break;
                 }
-                UserService userService = new UserServiceImpl();
+                UserService userService = new UserService();
                 if (userService.login(username)) {// 登录成功
                     System.out.println("[" + TimeUtil.getTimeInMillis() + "] ModeFrame: login succeed");
                     OnlineUtil.setUsername(username); // 设定当前用户的用户名
