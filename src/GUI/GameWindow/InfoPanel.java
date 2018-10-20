@@ -2,6 +2,7 @@ package GUI.GameWindow;
 
 import Model.Player;
 import Service.GameService;
+import Util.OnlineUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +54,9 @@ public class InfoPanel extends JPanel {
         message = "游戏开始"; // 不太可能用到此句
         for (Player player : GameService.getGameTable().getPlayers()) {
             if (player.isMyTurn()) {
-                message = "轮到 " + player.getUsername();
+                if (OnlineUtil.isThisClient(player))
+                    message = "轮到您";
+                else message = "轮到 " + player.getUsername();
             }
         }
         playedCards = new int[PLAYERNUM];

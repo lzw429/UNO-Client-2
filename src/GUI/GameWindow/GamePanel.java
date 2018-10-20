@@ -74,12 +74,19 @@ public class GamePanel extends JPanel {
 
     public void refreshPanel(GameTable gameTable) {
         for (Player player : gameTable.getPlayers()) {
-            if (OnlineUtil.isThisClient(player))
+            if (OnlineUtil.isThisClient(player)) {
                 playerPanel2.setCards(player);
-            else
+            } else {
                 playerPanel1.setCards(player);
+            }
+            if (player.isMyTurn()) {
+                if (OnlineUtil.isThisClient(player))
+                    this.tablePanel.getInfoPanel().setMessage("轮到您");
+                else this.tablePanel.getInfoPanel().setMessage("轮到 " + player.getUsername());
+            }
+            this.tablePanel.getInfoPanel().setError("");
         }
-
+        // 业务无关
         tablePanel.revalidate();
         revalidate();
     }

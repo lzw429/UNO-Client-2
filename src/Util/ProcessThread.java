@@ -219,7 +219,11 @@ public class ProcessThread extends Thread {
             System.out.println("ProcessThread: nextTurnResponse exception");
         }
         // 视图层
-        GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessage("轮到 " + username);
+        Player player = GameService.getGameTable().getPlayerByUsername(username);
+        if (OnlineUtil.isThisClient(player))
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessage("轮到您");
+        else
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessage("轮到 " + username);
     }
 
     private static void remainCardResponse(String msg) {

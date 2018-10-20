@@ -77,7 +77,7 @@ public class GameService {
         if (cannotPlayThisCard(cardPanel)) return; // 判断当前规则是否允许打出该牌
         String username = OnlineUtil.getUsername();
         String roomNum = OnlineUtil.getRoomNum();
-        String msg = "uno02 playcard " + username + " " + roomNum + " " + cardPanel.getNumber();
+        String msg = "uno02 playcard " + username + " " + roomNum + " " + cardPanel.getNumber() + "\r\n";
         try {
             OnlineUtil.sendMsg(msg);
         } catch (Exception e) {
