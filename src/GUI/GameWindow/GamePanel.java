@@ -81,10 +81,10 @@ public class GamePanel extends JPanel {
             }
             if (player.isMyTurn()) {
                 if (OnlineUtil.isThisClient(player))
-                    this.tablePanel.getInfoPanel().setMessage("轮到您");
-                else this.tablePanel.getInfoPanel().setMessage("轮到 " + player.getUsername());
+                    this.tablePanel.getInfoPanel().setMessageOnPanel("轮到您");
+                else this.tablePanel.getInfoPanel().setMessageOnPanel("轮到 " + player.getUsername());
             }
-            this.tablePanel.getInfoPanel().setError("");
+            this.tablePanel.getInfoPanel().setErrorOnPanel("");
         }
         // 业务无关
         tablePanel.revalidate();

@@ -63,6 +63,8 @@ public class ProcessThread extends Thread {
             remainCardResponse(msg);
         } else if (msg.startsWith("uno02 playcard")) {
             playCardResponse(msg);
+        } else if (msg.startsWith("uno02 seterror")) {
+            setError(msg);
         }
     }
 
@@ -221,9 +223,9 @@ public class ProcessThread extends Thread {
         // 视图层
         Player player = GameService.getGameTable().getPlayerByUsername(username);
         if (OnlineUtil.isThisClient(player))
-            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessage("轮到您");
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessageOnPanel("轮到您");
         else
-            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessage("轮到 " + username);
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setMessageOnPanel("轮到 " + username);
     }
 
     private static void remainCardResponse(String msg) {
@@ -239,10 +241,10 @@ public class ProcessThread extends Thread {
             System.out.println("ProcessThread: remainCardResponse exception");
         }
         // 视图层
-        GameFrame.getGamePanel().getTablePanel().getInfoPanel().setRemainCardNum(remainCardNum);
+        GameFrame.getGamePanel().getTablePanel().getInfoPanel().setRemainCardNumOnPanel(remainCardNum);
     }
 
-    private static void playCardResponse(String msg) {// uno02 playcard username topCardJson playerJson
+    private static void playCardResponse(String msg) { // uno02 playcard username topCardJson playerJson
         msg = msg.substring(0, msg.length() - 2);
         String[] msgSplit = msg.split(" ");
 
@@ -255,25 +257,18 @@ public class ProcessThread extends Thread {
             Player player = gson.fromJson(msgSplit[i], playerType);
             playerList.add(player);
         }
-
         // 模型层
         GameService.getGameTable().setPlayers(playerList);
         // 视图层
         GameFrame.getGamePanel().refreshPanel(GameService.getGameTable()); // 修改玩家手中的牌
         GameFrame.getGamePanel().getTablePanel().setPlayedCard(new CardFrontPanel(topCard)); // 修改牌桌上的牌
+    }
 
-//        Player player = GameService.getGameTable().getPlayerByUsername(username);
-//        if (player.getMyCards().size() == 1 && !player.isSaidUNO()) {
-//            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setError(username +" 忘记说 UNO 啦");
-//        }
+    private static void setError(String msg) { // uno02 seterror error
+        msg = msg.substring(0, msg.length() - 2);
+        String[] msgSplit = msg.split(" ");
 
-//        if (p.getTotalCards() == 1 && !p.getSaidUNO()) {
-//            infoPanel.setError(p.getName() + " Forgot to say UNO");
-//            p.obtainCard(getCard());
-//            p.obtainCard(getCard());
-//        }else if(p.getTotalCards()>2){
-//            p.setSaidUNOFalse();
-//        }
+        GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel(msgSplit[2]);
     }
 
 }

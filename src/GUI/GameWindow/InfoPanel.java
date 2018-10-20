@@ -20,12 +20,12 @@ public class InfoPanel extends JPanel {
 
     /* getter & setter */
 
-    public void setMessage(String message) {
+    public void setMessageOnPanel(String message) {
         this.message = message;
         this.repaint();
     }
 
-    public void setError(String error) {
+    public void setErrorOnPanel(String error) {
         this.error = error;
         this.repaint();
     }
@@ -39,7 +39,7 @@ public class InfoPanel extends JPanel {
         return remainCardNum;
     }
 
-    public void setRemainCardNum(int remainCardNum) {
+    public void setRemainCardNumOnPanel(int remainCardNum) {
         this.remainCardNum = remainCardNum;
         this.repaint();
     }

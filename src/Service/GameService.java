@@ -96,7 +96,7 @@ public class GameService {
             if (gameTable.getPlayerByUsername(OnlineUtil.getUsername()).isMyTurn()) {
                 return false;
             }
-            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setError("还没轮到您");
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel("还没轮到您");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,17 +114,17 @@ public class GameService {
         CardPanel topCard = GameFrame.getGamePanel().getTablePanel().getTopCard();
 
         // 颜色或值匹配
-        if (topCard.getColor().equals(newCard.getColor()) || topCard.getValue().equals(newCard.getValue()))
+        if (topCard.getColor().equals(newCard.getColor()) || topCard.getValue().equals(newCard.getValue())) {
             ret = false;
-
-            // 万能牌颜色匹配
-        else if (topCard.getType() == CardPanel.WILD)
+        }
+        // 万能牌颜色匹配
+        else if (topCard.getType() == CardPanel.WILD) {
             ret = !topCard.getWildChosenColor().equals(newCard.getColor()); // 注意返回否定形式
-
-        else ret = newCard.getType() != CardPanel.WILD;
-
+        } else {
+            ret = newCard.getType() != CardPanel.WILD;
+        }
         if (ret) { // 提示无效操作
-            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setError("无效操作");
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel("无效操作");
         }
         return ret;
     }

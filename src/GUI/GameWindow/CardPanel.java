@@ -10,33 +10,28 @@ import java.awt.event.MouseEvent;
 
 public class CardPanel extends JPanel {
     // 卡片颜色
-    public final Color RED = new Color(192, 80, 77);
-    public final Color BLUE = new Color(31, 73, 125);
-    public final Color GREEN = new Color(0, 153, 0);
-    public final Color YELLOW = new Color(255, 204, 0);
-    public final Color BLACK = new Color(0, 0, 0);
-    public final Color[] colors = {RED, BLUE, GREEN, YELLOW, BLACK};
+    public static Color RED = new Color(192, 80, 77);
+    public static Color BLUE = new Color(31, 73, 125);
+    public static Color GREEN = new Color(0, 153, 0);
+    public static Color YELLOW = new Color(255, 204, 0);
+    public static Color BLACK = new Color(0, 0, 0);
+    public static Color[] colors = {RED, BLUE, GREEN, YELLOW, BLACK};
 
     // 动作牌字符
-    public final Character charREVERSE = (char) 8634; // 十进制
-    public final Character charSKIP = (char) Integer.parseInt("2718", 16); // Unicode
+    public static Character charREVERSE = (char) 8634; // 十进制
+    public static Character charSKIP = (char) Integer.parseInt("2718", 16); // Unicode
 
     // 动作牌
-    public final String REVERSE = charREVERSE.toString();
-    public final String SKIP = charSKIP.toString();
-    public final String DRAW2PLUS = "2+";
+    public static String
+            REVERSE = charREVERSE.toString();
+    public static String SKIP = charSKIP.toString();
+    public static String DRAW2PLUS = "2+";
 
     // 万能牌
-    public final String W_COLORPICKER = "W";
-    public final String W_DRAW4PLUS = "4+";
-    public final String[] actionTypes = {REVERSE, SKIP, DRAW2PLUS}; // 动作牌
-    public final String[] wildTypes = {W_COLORPICKER, W_DRAW4PLUS}; // 万能牌
-
-    public final int red = 0;
-    public final int blue = 1;
-    public final int green = 2;
-    public final int yellow = 3;
-    public final int black = 4;
+    public static String W_COLORPICKER = "W";
+    public static String W_DRAW4PLUS = "4+";
+    public static String[] actionTypes = {REVERSE, SKIP, DRAW2PLUS}; // 动作牌
+    public static String[] wildTypes = {W_COLORPICKER, W_DRAW4PLUS}; // 万能牌
 
     // 卡片类型
     public static final int NUMBERS = 1;
