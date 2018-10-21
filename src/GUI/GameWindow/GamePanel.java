@@ -2,7 +2,6 @@ package GUI.GameWindow;
 
 import Model.GameTable;
 import Model.Player;
-import Model.UNOCard;
 import Util.OnlineUtil;
 
 import javax.swing.*;
@@ -18,7 +17,7 @@ public class GamePanel extends JPanel {
     public GamePanel(GameTable gameTable) {
         int remainCardNum = gameTable.getRemainCardNum();
         List<Player> playerList = gameTable.getPlayers();
-        CardFrontPanel firstCardPanel = new CardFrontPanel(gameTable.getFirstCard());
+        CardFrontPanel firstCardPanel = new CardFrontPanel(gameTable.getTopCard());
 
         setPreferredSize(new Dimension(960, 720));
         setBackground(new Color(30, 36, 40));
@@ -66,28 +65,29 @@ public class GamePanel extends JPanel {
         this.tablePanel = tablePanel;
     }
 
-    /* 成员方法 */
-    boolean isValidMove(UNOCard unoCard) {
-        // todo code
-        return false;
-    }
-
     public void refreshPanel(GameTable gameTable) {
         for (Player player : gameTable.getPlayers()) {
+            // 设置卡牌
             if (OnlineUtil.isThisClient(player)) {
                 playerPanel2.setCards(player);
             } else {
                 playerPanel1.setCards(player);
             }
+            // 设置轮次
             if (player.isMyTurn()) {
                 if (OnlineUtil.isThisClient(player))
                     this.tablePanel.getInfoPanel().setMessageOnPanel("轮到您");
                 else this.tablePanel.getInfoPanel().setMessageOnPanel("轮到 " + player.getUsername());
             }
+            // 设置错误信息
             this.tablePanel.getInfoPanel().setErrorOnPanel("");
         }
+        // 设置牌桌背景色和最近一张打出的牌
+        tablePanel.setPlayedCard(new CardFrontPanel(gameTable.getTopCard()));
+        tablePanel.getTable().setBackground(gameTable.getTableBackgroundColor());
+
         // 业务无关
         tablePanel.revalidate();
-        revalidate();
+        this.revalidate();
     }
 }

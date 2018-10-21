@@ -17,13 +17,17 @@ public class CardPanel extends JPanel {
     public static Color BLACK = new Color(0, 0, 0);
     public static Color[] colors = {RED, BLUE, GREEN, YELLOW, BLACK};
 
+    public static final int red = 0;
+    public static final int blue = 1;
+    public static final int green = 2;
+    public static final int yellow = 3;
+
     // 动作牌字符
     public static Character charREVERSE = (char) 8634; // 十进制
     public static Character charSKIP = (char) Integer.parseInt("2718", 16); // Unicode
 
     // 动作牌
-    public static String
-            REVERSE = charREVERSE.toString();
+    public static String REVERSE = charREVERSE.toString();
     public static String SKIP = charSKIP.toString();
     public static String DRAW2PLUS = "2+";
 
@@ -53,7 +57,6 @@ public class CardPanel extends JPanel {
     protected Color color; // 牌的颜色
     protected String value; // 牌上的数字或牌的功能
     protected int type; // 牌的类型
-    protected Color wildChosenColor; // 万能牌选择的颜色
 
     protected Border defaultBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.white, Color.gray);
     protected Border focusedBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.black, Color.gray);
@@ -115,13 +118,5 @@ public class CardPanel extends JPanel {
 
     public int getType() {
         return type;
-    }
-
-    public Color getWildChosenColor() {
-        return wildChosenColor;
-    }
-
-    public void setWildChosenColor(Color wildChosenColor) {
-        this.wildChosenColor = wildChosenColor;
     }
 }

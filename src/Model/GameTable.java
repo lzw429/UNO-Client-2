@@ -1,13 +1,15 @@
 package Model;
 
+import java.awt.*;
 import java.util.List;
 
 public class GameTable {
     private int status; // 游戏状态
     private int mode; // 游戏模式
     private int remainCardNum; // 剩余卡牌数
-    private UNOCard firstCard;
+    private UNOCard topCard;
     private List<Player> players; // 房间中的玩家列表
+    private Color tableBackgroundColor;
 
     // mode 常量
     public static final int ONLINE = 2;
@@ -18,7 +20,7 @@ public class GameTable {
     public GameTable(int mode, int remainCardNum, UNOCard firstCard, List<Player> playerList) {
         this.mode = mode;
         this.remainCardNum = remainCardNum;
-        this.firstCard = firstCard;
+        this.topCard = firstCard;
         this.players = playerList;
     }
 
@@ -39,23 +41,20 @@ public class GameTable {
         this.remainCardNum = remainCardNum;
     }
 
-    public UNOCard getFirstCard() {
-        return firstCard;
+    public UNOCard getTopCard() {
+        return topCard;
     }
 
-    public void setFirstCard(UNOCard firstCard) {
-        this.firstCard = firstCard;
+    public void setTopCard(UNOCard topCard) {
+        this.topCard = topCard;
     }
 
-    /**
-     * 检查当前打出的牌是否有效
-     *
-     * @param playedCard 打出的牌
-     * @return 有效 true；无效 false
-     */
-    public boolean isValidMove(UNOCard playedCard) {
-        // todo code
-        return false;
+    public Color getTableBackgroundColor() {
+        return tableBackgroundColor;
+    }
+
+    public void setTableBackgroundColor(Color tableBackgroundColor) {
+        this.tableBackgroundColor = tableBackgroundColor;
     }
 
     public Player getPlayerByUsername(String username) {

@@ -68,7 +68,7 @@ public class GameService {
     }
 
     /**
-     * 请求打出一张牌
+     * 请求打出一张数字牌或功能牌
      *
      * @param cardPanel 卡牌面板
      */
@@ -78,6 +78,26 @@ public class GameService {
         String username = OnlineUtil.getUsername();
         String roomNum = OnlineUtil.getRoomNum();
         String msg = "uno02 playcard " + username + " " + roomNum + " " + cardPanel.getNumber() + "\r\n";
+        try {
+            OnlineUtil.sendMsg(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("GameService: play card request exception");
+        }
+    }
+
+    /**
+     * 请求打出一张万能牌
+     *
+     * @param cardPanel 卡牌面板
+     * @param wildColor 万能牌所选颜色
+     */
+    public void playCardRequest(CardPanel cardPanel, int wildColor) { // uno02 playcard username roomnum cardnum colornum
+        if (isNotMyTurn()) return; // 判断轮次
+        if (cannotPlayThisCard(cardPanel)) return; // 判断当前规则是否允许打出该牌
+        String username = OnlineUtil.getUsername();
+        String roomNum = OnlineUtil.getRoomNum();
+        String msg = "uno02 playcard " + username + " " + roomNum + " " + cardPanel.getNumber() + " " + wildColor + "\r\n";
         try {
             OnlineUtil.sendMsg(msg);
         } catch (Exception e) {
@@ -119,12 +139,12 @@ public class GameService {
         }
         // 万能牌颜色匹配
         else if (topCard.getType() == CardPanel.WILD) {
-            ret = !topCard.getWildChosenColor().equals(newCard.getColor()); // 注意返回否定形式
+            ret = !GameFrame.getGamePanel().getTablePanel().getTable().getBackground().equals(newCard.getColor()); // 注意返回否定形式
         } else {
-            ret = newCard.getType() != CardPanel.WILD;
+            ret = newCard.getType() != CardPanel.WILD; // 新打出的万能卡不受卡牌颜色和值的影响
         }
         if (ret) { // 提示无效操作
-            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel("无效操作");
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel("选错牌啦");
         }
         return ret;
     }

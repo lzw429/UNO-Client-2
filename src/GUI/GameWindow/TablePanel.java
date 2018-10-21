@@ -36,7 +36,7 @@ public class TablePanel extends JPanel {
 
         topCard = firstCard; // 牌桌上首张牌
         table = new JPanel();
-        table.setBackground(new Color(64, 64, 64));
+        table.setBackground(firstCard.getColor());
         infoPanel = new InfoPanel(remainCardNum);
 
         setTable();
@@ -80,8 +80,6 @@ public class TablePanel extends JPanel {
         table.removeAll();
         topCard = playedCard;
         setTable();
-
-        setBackgroundColor(playedCard);
     }
 
     /**
@@ -90,7 +88,6 @@ public class TablePanel extends JPanel {
      * @param playedCard 打出的牌
      */
     private void setBackgroundColor(CardFrontPanel playedCard) {
-        Color background = playedCard.getColor();
-        table.setBackground(background);
+        table.setBackground(playedCard.getColor());
     }
 }

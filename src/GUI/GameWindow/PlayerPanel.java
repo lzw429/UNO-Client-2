@@ -16,10 +16,23 @@ public class PlayerPanel extends JPanel {
     private Box controlBox; // 控制区
     private JLabel nameLabel; // 用户名标签
     private ControlButtonHandler controlButtonHandler;
+    private PlayerCardMouseAdapter playerCardMouseAdapter;
 
     // 控制区
     private JButton draw; // 抽牌
     private JButton sayUNO; // 说 UNO
+
+    /**
+     * 停止游戏
+     * 移除监听器
+     */
+    public void stopPlay() {
+        draw.removeActionListener(controlButtonHandler);
+        sayUNO.removeActionListener(controlButtonHandler);
+        for (Component cardPanel : cardHolder.getComponents()) {
+            cardPanel.removeMouseListener(playerCardMouseAdapter);
+        }
+    }
 
     /* 构造方法 */
 
@@ -45,7 +58,6 @@ public class PlayerPanel extends JPanel {
         }
     }
 
-
     /* 成员方法 */
 
     /**
@@ -64,7 +76,8 @@ public class PlayerPanel extends JPanel {
             if (OnlineUtil.isThisClient(player)) {
                 // 本客户的牌，另加一个 MouseListener，用于打出该牌
                 cardPanel = new CardFrontPanel(unoCard);
-                cardPanel.addMouseListener(new PlayerCardMouseAdapter());
+                playerCardMouseAdapter = new PlayerCardMouseAdapter();
+                cardPanel.addMouseListener(playerCardMouseAdapter);
             } else {
                 // 不是本客户的牌，对该客户暂不可见
                 cardPanel = new CardBackPanel(unoCard);

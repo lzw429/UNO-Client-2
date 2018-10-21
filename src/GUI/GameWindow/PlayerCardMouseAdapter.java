@@ -1,6 +1,7 @@
 package GUI.GameWindow;
 
 import Service.GameService;
+import Util.TimeUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +20,7 @@ public class PlayerCardMouseAdapter extends MouseAdapter {
 
     public void mousePressed(MouseEvent e) {
         sourceCard = (CardFrontPanel) e.getSource();
-        if (sourceCard.getType() == CardPanel.WILD) {
+        if (sourceCard.getType() == CardPanel.WILD) { // 打出万能牌
             // 选择万能牌颜色
             List<String> colors = new CopyOnWriteArrayList<>();
             colors.add("红");
@@ -29,10 +30,31 @@ public class PlayerCardMouseAdapter extends MouseAdapter {
 
             String chosenColor = (String) JOptionPane.showInputDialog(null, "选择颜色", "万能卡指定颜色",
                     JOptionPane.PLAIN_MESSAGE, null, colors.toArray(), null);
-
-        }
-        // 打出这张牌
-        gameService.playCardRequest(sourceCard);
+            if (chosenColor == null) return; // 不打出这张牌
+            int selectedColor = -1;
+            switch (chosenColor) {
+                case "红":
+                    selectedColor = CardPanel.red;
+                    break;
+                case "蓝":
+                    selectedColor = CardPanel.blue;
+                    break;
+                case "绿":
+                    selectedColor = CardPanel.green;
+                    break;
+                case "黄":
+                    selectedColor = CardPanel.yellow;
+                    break;
+                default:
+                    break;
+            }
+            if (selectedColor == -1) { // 正常的取值是 0～3 范围内的整数
+                System.out.println("[" + TimeUtil.getTimeInMillis() + "] PLayerCardMouseAdapter: choose wild card color failed"); // 颜色选择错误
+                return;
+            }
+            gameService.playCardRequest(sourceCard, selectedColor);
+        } else // 打出数字牌或功能牌
+            gameService.playCardRequest(sourceCard);
     }
 
     @Override

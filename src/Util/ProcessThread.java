@@ -1,7 +1,8 @@
 package Util;
 
-import GUI.GameWindow.CardFrontPanel;
+import GUI.GameWindow.CardPanel;
 import GUI.GameWindow.GameFrame;
+import GUI.GameWindow.InfoPanel;
 import GUI.HallFrame;
 import Model.GameTable;
 import Model.Player;
@@ -11,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -65,6 +67,10 @@ public class ProcessThread extends Thread {
             playCardResponse(msg);
         } else if (msg.startsWith("uno02 seterror")) {
             setError(msg);
+        } else if (msg.startsWith("uno02 gameover")) {
+            gameOverResponse(msg);
+        } else if (msg.startsWith("uno02 wildcolor")) {
+            wildColorResponse(msg);
         }
     }
 
@@ -258,10 +264,14 @@ public class ProcessThread extends Thread {
             playerList.add(player);
         }
         // 模型层
-        GameService.getGameTable().setPlayers(playerList);
+        GameTable gameTable = GameService.getGameTable();
+        gameTable.setPlayers(playerList);
+        gameTable.setTopCard(topCard);
+        if (topCard.getType() != CardPanel.WILD) {
+            gameTable.setTableBackgroundColor(CardPanel.colors[topCard.getColor()]);
+        }
         // 视图层
-        GameFrame.getGamePanel().refreshPanel(GameService.getGameTable()); // 修改玩家手中的牌
-        GameFrame.getGamePanel().getTablePanel().setPlayedCard(new CardFrontPanel(topCard)); // 修改牌桌上的牌
+        GameFrame.getGamePanel().refreshPanel(gameTable); // 修改玩家手中的牌和牌桌上的牌
     }
 
     private static void setError(String msg) { // uno02 seterror error
@@ -271,4 +281,47 @@ public class ProcessThread extends Thread {
         GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel(msgSplit[2]);
     }
 
+    private static void gameOverResponse(String msg) { // uno02 gameover
+        String winnerUsername = null;
+
+        // 模型
+        for (Player player : GameService.getGameTable().getPlayers()) {
+            if (player.getMyCards().isEmpty()) {
+                winnerUsername = player.getUsername();
+            }
+            player.setMyTurn(false);
+        }
+
+        // 视图
+        InfoPanel infoPanel = GameFrame.getGamePanel().getTablePanel().getInfoPanel();
+        infoPanel.setErrorOnPanel("游戏结束");
+        String winMessage;
+        if (winnerUsername == null) {
+            winMessage = "来日方长";
+        } else if (winnerUsername.equals(OnlineUtil.getUsername())) {
+            winMessage = "恭喜您获胜！";
+        } else {
+            winMessage = winnerUsername + " 获胜";
+        }
+        infoPanel.setMessageOnPanel(winMessage);
+
+        // 使监听器失效
+        GameFrame.getGamePanel().getPlayerPanel1().stopPlay();
+        GameFrame.getGamePanel().getPlayerPanel2().stopPlay();
+    }
+
+    private static void wildColorResponse(String msg) {
+        msg = msg.substring(0, msg.length() - 2);
+        String[] msgSplit = msg.split(" ");
+        int wildColor = Integer.parseInt(msgSplit[2]);
+        if (wildColor < 0 || wildColor > 3) {
+            System.out.println("ProcessThread: wild color response exception");
+            return;
+        }
+        // 模型
+        Color selectedColor = CardPanel.colors[wildColor];
+        GameService.getGameTable().setTableBackgroundColor(selectedColor);
+        // 视图
+        GameFrame.getGamePanel().getTablePanel().getTable().setBackground(selectedColor);
+    }
 }
