@@ -1,5 +1,7 @@
 package Model;
 
+import GUI.GameWindow.CardPanel;
+
 import java.awt.*;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class GameTable {
         this.remainCardNum = remainCardNum;
         this.topCard = firstCard;
         this.players = playerList;
+        this.tableBackgroundColor = CardPanel.colors[topCard.getColor()];
     }
 
     // getter & setter

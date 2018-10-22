@@ -9,6 +9,7 @@ import Model.Player;
 import Model.UNOCard;
 import Service.GameService;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
@@ -20,9 +21,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ProcessThread extends Thread {
     private static Gson gson = new Gson();
     private static GameService gameService = new GameService();
-    private static Type UNOCardType = new TypeToken<UNOCard>() {
+    public final static Type UNOCardType = new TypeToken<UNOCard>() {
     }.getType();
-    private static Type playerType = new TypeToken<Player>() {
+    public final static Type playerType = new TypeToken<Player>() {
     }.getType();
 
     /**
@@ -259,10 +260,16 @@ public class ProcessThread extends Thread {
         String topCardJson = msgSplit[3];
         UNOCard topCard = gson.fromJson(topCardJson, UNOCardType);
         List<Player> playerList = new CopyOnWriteArrayList<>();
-        for (int i = 4; i < msgSplit.length; i++) {
-            Player player = gson.fromJson(msgSplit[i], playerType);
-            playerList.add(player);
+        try {
+            for (int i = 4; i < msgSplit.length; i++) {
+                Player player = gson.fromJson(msgSplit[i], playerType);
+                playerList.add(player);
+            }
+        } catch (JsonSyntaxException jse) {
+            jse.printStackTrace();
+            System.out.println("[" + TimeUtil.getTimeInMillis() + "] ProcessThread: json illegal state exception");
         }
+
         // 模型层
         GameTable gameTable = GameService.getGameTable();
         gameTable.setPlayers(playerList);
@@ -272,6 +279,7 @@ public class ProcessThread extends Thread {
         }
         // 视图层
         GameFrame.getGamePanel().refreshPanel(gameTable); // 修改玩家手中的牌和牌桌上的牌
+
     }
 
     private static void setError(String msg) { // uno02 seterror error
@@ -306,7 +314,7 @@ public class ProcessThread extends Thread {
         infoPanel.setMessageOnPanel(winMessage);
 
         // 使监听器失效
-        GameFrame.getGamePanel().getPlayerPanel1().stopPlay();
+        // playerPanel1 不需要执行
         GameFrame.getGamePanel().getPlayerPanel2().stopPlay();
     }
 
