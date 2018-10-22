@@ -33,13 +33,14 @@ public class ProcessThread extends Thread {
         OnlineUtil.readyToProcess = true;
         gson = new Gson();
         System.out.println("[" + TimeUtil.getTimeInMillis() + "] ProcessThread has started");
-        //noinspection InfiniteLoopStatement
-        while (true) {
+
+        while (!Thread.currentThread().isInterrupted()) {
             String msg = OnlineUtil.getMessageList().poll(); // 阻塞队列
             if (msg != null) {
                 processMsg(msg);
             }
         }
+        System.out.println("[" + TimeUtil.getTimeInMillis() + "] ProcessThread: thread interrupt");
     }
 
     /**
@@ -286,7 +287,9 @@ public class ProcessThread extends Thread {
         msg = msg.substring(0, msg.length() - 2);
         String[] msgSplit = msg.split(" ");
 
-        GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel(msgSplit[2]);
+        if (msgSplit[2].equals("0")) { // 忘记说 UNO
+            GameFrame.getGamePanel().getTablePanel().getInfoPanel().setErrorOnPanel(msgSplit[3] + " 忘了说 UNO");
+        }
     }
 
     private static void gameOverResponse(String msg) { // uno02 gameover

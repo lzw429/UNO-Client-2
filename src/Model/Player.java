@@ -59,20 +59,4 @@ public class Player {
     public void setPlayedCards(int playedCards) {
         this.playedCards = playedCards;
     }
-
-    /* 成员方法 */
-
-    /**
-     * 打出一张牌
-     *
-     * @param number 卡牌号
-     */
-    public void playCard(int number) {
-        // todo
-    }
-
-    public void sayUNO() {
-        // todo
-    }
-
 }

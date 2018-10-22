@@ -7,7 +7,7 @@ public class ListeningThread extends Thread {
         while (!OnlineUtil.connectServer()) {
             try {
                 System.out.println("OnlineClient: The connection failed and will be retried after 5 seconds");
-                sleep(5000);
+                sleep(5000); // 5 秒后重试连接
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -15,7 +15,7 @@ public class ListeningThread extends Thread {
         StringBuilder builder;
         char chars[] = new char[GameConstants.BUFSIZ];
         System.out.println("[" + TimeUtil.getTimeInMillis() + "] ListeningThread has started");
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 OnlineUtil.readyToReceive = true;
                 IntStream.range(0, GameConstants.BUFSIZ).forEach(i -> chars[i] = '\0');
@@ -31,10 +31,10 @@ public class ListeningThread extends Thread {
                     System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: Receive from server, len = " + oneMsg.length() + ": " + oneMsg);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 System.out.println("[" + TimeUtil.getTimeInMillis() + "] OnlineClient: receive message exception");
                 return;
             }
         }
+        System.out.println("[" + TimeUtil.getTimeInMillis() + "] ListeningThread: thread interrupt");
     }
 }

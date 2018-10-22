@@ -20,8 +20,13 @@ public class ModeFrame {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 // 在线游戏 按钮 被按下
-                new ListeningThread().start(); // 启动线程,接收消息,放入消息队列
-                new ProcessThread().start(); // 启动线程,处理消息队列
+
+                // 启动线程,接收消息,放入消息队列
+                OnlineUtil.setListeningThread(new ListeningThread());
+                OnlineUtil.getListeningThread().start();
+                // 启动线程,处理消息队列
+                OnlineUtil.setProcessThread(new ProcessThread());
+                OnlineUtil.getProcessThread().start();
                 // 要求键入用户名
                 String username = JOptionPane.showInputDialog("用户登录");
                 username = GameConstants.removeIllegalChar(username);

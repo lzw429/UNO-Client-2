@@ -24,8 +24,34 @@ public class OnlineUtil {
     static boolean readyToReceive = false;
     static boolean readyToProcess = false;
     private static BlockingQueue<String> messageList = new LinkedBlockingQueue<>(); // 阻塞队列
+    private static ListeningThread listeningThread;
+    private static ProcessThread processThread;
 
     /* getter & setter */
+
+    public static ListeningThread getListeningThread() {
+        return listeningThread;
+    }
+
+    public static void setListeningThread(ListeningThread listeningThread) {
+        OnlineUtil.listeningThread = listeningThread;
+    }
+
+    public static ProcessThread getProcessThread() {
+        return processThread;
+    }
+
+    public static void setProcessThread(ProcessThread processThread) {
+        OnlineUtil.processThread = processThread;
+    }
+
+    public static void setReadyToReceive(boolean readyToReceive) {
+        OnlineUtil.readyToReceive = readyToReceive;
+    }
+
+    public static void setReadyToProcess(boolean readyToProcess) {
+        OnlineUtil.readyToProcess = readyToProcess;
+    }
 
     public static String getUsername() {
         return username;
@@ -91,8 +117,11 @@ public class OnlineUtil {
     public static boolean closeSocket() {
         try {
             writer.close();
+            writer = null;
             reader.close();
+            reader = null;
             socket.close();
+            socket = null;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("OnlineClient: close socket failed");
